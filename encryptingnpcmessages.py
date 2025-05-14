@@ -29,3 +29,7 @@ converter = {
     "y": "🌻",
     "z": "🥀"
 }
+
+def encodemsg(npcmsg):
+    for i in range(len(npctext)):
+        print(converter[npctext[i]], end = " ")
