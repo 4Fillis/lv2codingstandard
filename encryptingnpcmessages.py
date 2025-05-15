@@ -1,13 +1,20 @@
+#function to encrypt the npcs text so it and the code is easily changable
+
+#dictionaries
+from random import randint
+
 #name of npc being interacted with
 npcname = "Coral"
 
 def npctalk(npcname):
-    #npc dialogue options
+    #npc dialogue options INSERT MORE
+    #INSERT MORE NPCS
     npctext = {
-    "Coral": ["hello", "oh hi, it's you again"],
-    "Persephone": ["beware small creature, leave if you value your life", "you won't last long here"]
+    "Coral": [" hello1", 'oh hi its you again'],
+    "Persephone": ["beware small creature leave if you value your life", "you wont last long here"]
     }
-    #counting number of interactions per npc
+    #counting number of interactions per npc 
+    #INSERT MORE NPCS
     npcintercnt = {
         "Coral": 0,
         "Persephone": 0
@@ -40,15 +47,27 @@ def npctalk(npcname):
     "w": "👁️",
     "x": "🔪",
     "y": "🌻",
-    "z": "🥀"
+    "z": "🥀",
+    " ": " ⎛⎝ ≽ ^ ⩊ ^ ≼ ⎠⎞",
+    "1": "1️⃣",
+    "2": "2️⃣",
+    "3": "3️⃣",
+    "4": "4️⃣",
+    "5": "5️⃣",
+    "6": "6️⃣",
+    "7": "7️⃣",
+    "8": "8️⃣",
+    "9": "9️⃣", 
+    "0": "0️⃣"
     }
 
-    #finding correct npc message
+    #unless first interaction, randomise response within npctext list
+    if npcintercnt[npcname] < 1:
+        npcmsg = npctext[npcname][0]
+    else:
+        npcmsg = npctext[npcname][randint(0, (len(npctext[npcname]))-1)]
 
-    npcmsg = npctext[npcname][npcintercnt[npcname]]
     npcmsg = npcmsg.lower()
-    #do smth if out of range
-
 
     #turns input text into emoji translate
     for i in range(len(npcmsg)):
