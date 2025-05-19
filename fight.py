@@ -1,14 +1,33 @@
-#function to fight whatever you're gonna fight
+#fighting fight
+from random import randint
+fightchoices = ['paper', 'scissors', 'rock']
 
-#ADD DICTIONARY OF ITEMS IN GAME
+#dict of health n stuff
+health = {
+    "bread":0,
+    "human":5,
+    "user":3,
+    "clam":2
+}
 
 #variables
-cinteractin = "bread"
-fighting = cinteractin
+interaction = "bread"
 
-#IF FIGHT CHANGE CURRENT INTERACTION TO FIGHT
+#sequence for fighting
+def fightsequence(interaction):
+    user = input(f"Would you like to: {fightchoices[1]}, {fightchoices[2]}, or {fightchoices[3]}")
+    npc = fightchoices[randint(0, 2)]
+    while health[user]
+    if npc == 
+    if npc == 'paper' and user == 'rock':
+        print("youlose")
 
-#DISCERN IF FIGHTING ITEM OR PERSON/HUMANOID
+#fight function
+def fight(interaction):
+    if interaction in npcs:
+        print(f"you decide to fight {interaction}")
+        fightsequence(interaction)
 
-def fight(fighting):
-    print("print")
+
+if useraction == "fight":
+    fight(interaction)
