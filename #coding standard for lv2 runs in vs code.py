@@ -1,7 +1,14 @@
 #coding standard for lv2
-from random import randint
+#insert cool docs string
+from random import *
 
-#dictionary of areas
+#variables
+areaindex = 1
+interacting = "Coral"
+#message to be displayed
+message = ""
+
+#areas
 areas = {
   1:"Hospital",
   2:"Seaweed farm",
@@ -13,7 +20,7 @@ areas = {
   8:"Scrapyard",
 }
 
-#dictionary of descriptions of each area
+#descriptions of each area
 area_description = {
   1:"Goopy Worm",
   2:"wiggly",
@@ -25,11 +32,11 @@ area_description = {
   8:"description",
 }
 
-#dictionary of all the NPCs in each area 
+#NPCs in each area 
 npcs = {
-  #   name       stature         wearing            action                where                 pronouns   friendship interest / 10
+  #  0 name     1 stature       2 wearing          3 action              4 where            5 6 pronouns   7 friendship interest / 10
   1:["Coral", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  2:["Persephone", "tall dark woman", "black mechanics fit", "engineering something in the cogswork", "under a vicious looking copper machine", 4],
+  2:["Persephone", "tall dark woman", "black mechanics fit", "engineering something in the cogswork", "under a vicious looking copper machine", "she", "her",  4],
   3:["Coral", "small woman", "pink lab coat", "kind"],
   4:["Coral", "small woman", "pink lab coat", "kind"],
   5:["Coral", "small woman", "pink lab coat", "kind"],
@@ -37,6 +44,11 @@ npcs = {
   7:["Coral", "small woman", "pink lab coat", "kind"],
   8:["Coral", "small woman", "pink lab coat", "kind"],
 }
+
+#npcs in a list for checking if x is npc in fight
+list_npcs = []
+for i in range(len(npcs)):
+  list_npcs.append(str(npcs[i+1][0]))
 
 #list of items in each area
 items = {
@@ -50,8 +62,8 @@ items = {
   8:"Metal wheel hat",
 }
 
-
-#dictionary of things in areas
+#dictionaries
+#things in areas
 area_attribute = {
   areas[1]: [npcs[1], items[1], area_description[1]],
   areas[2]: [npcs[2], items[2], area_description[2]],
@@ -62,22 +74,34 @@ area_attribute = {
   areas[7]: [npcs[7], items[7], area_description[7]],
   areas[8]: [npcs[8], items[8], area_description[8]],
 }
+#health
+health = {
+  "bread":0,
+  "Coral":5,
+  "Player":3,
+  "clam":2
+  }
+bodyparts = {
+  "left arm": "pulls out", 
+  "right arm": "scratches", 
+  "shirt": "grabs",
+  "left leg": "pulls", 
+  "right leg": "yoinks", 
+  "foot": "stamps on",
+  "mass": "grabs at",
+  "head": "yanks", 
+  "eye": "pokes",
+  "stomach": "pushes", 
+  "shin": "bruises"
+}
 
-#variables
-#what area you're on
-areaindex = 1
-#message to be displayed
-message = ""
+npcs_parts = {
+  "Coral": ["left arm", "right leg", "eye", "mass"],
+  "Persephone": ["left arm", "golden eye", "false leg", "mass", "head"]
+}
 
-def desc_npc(areaindex):
-  npc_desc = npcs[areaindex]
-  #get npc and describe them non repeditivley
-  if randint(1, 2) == 2:
-    npc_desc = f"{npcs[areaindex][2]} {npcs[areaindex][4]} {npcs[areaindex][5]}"
-  return(npc_desc)
-
-
-#function for when player moves areas
+#functions
+#player moves areas
 def new_area(areaindex, npc_desc):
   #if player is in the last area
   if areaindex == 8:
@@ -89,15 +113,19 @@ def new_area(areaindex, npc_desc):
     areaindex += 1
     #describe npc in room is possible
     if npcs[areaindex][1].lower() != "none":
-      desc_npc(areaindex)
-      print(f"there's a {npc_desc}")
-      #npc does action based on friendliness level
-      if npcs[areaindex][8] > 7:
-        print(f"{npcs[areaindex][6]} waves at you")
-      elif npcs[areaindex][8] > 5:
-        print(f"{npcs[areaindex][6]} looks up questioningly")
+      #get npc and describe them non repeditivley
+      if randint(1, 2) == 2:
+        npc_desc = f"theres a {npcs[areaindex][1]} {npcs[areaindex][3]} {npcs[areaindex][4]}"
       else:
-        print(f"{npcs[areaindex][6]} tells you to piss off")
+        npc_desc = f"a {npcs[areaindex][1]} is {npcs[areaindex][3]} {npcs[areaindex][4]}"
+      print(f"{npc_desc}")
+      #npc does action based on friendliness level
+      if npcs[areaindex][7] > 7:
+        print(f"{npcs[areaindex][5]} waves at you ^-^")
+      elif npcs[areaindex][7] > 5:
+        print(f"{npcs[areaindex][5]} looks up questioningly..")
+      else:
+        print(f"...\n{npcs[areaindex][5]} tells you to piss off")
     else:
       print("the place is void of any and all people")      
 
@@ -105,14 +133,46 @@ def new_area(areaindex, npc_desc):
 
 new_area(areaindex, npc_desc="")
 
-#DICTIONARY INDEXING EXAMPLE
-my_dict = {"a": [1, 2, 3]}
+#fighting npcs
+def fightsequence(interacting, health, bodyparts, areaindex, npcs):
+  print("fight sequence begin")
+  while health[interacting] > 0 and health["Player"] > 0:
+    #move decisions
+    fightchoices = ['rock', 'paper', 'scissors', 'rock']
+    user = input(f"Would you like to: {fightchoices[0]}, {fightchoices[1]}, or {fightchoices[2]}\n")
+    npc = fightchoices[randint(0, 2)]
 
-key = "c"
-index = 3
+    print(f"{interacting} tries to {npc}")
+    parts_taken = ""
+    if npc == user:
+      print(f"you both try to {user}. Nothing happens.")
+      #if npc wins randomise hit message + body part taken
+    elif fightchoices.index(npc) == (fightchoices.index(user) -1):
+      hits_what = random.choice(list(bodyparts.keys()))
+      hits_how = hits_what[hits_what]
+      del bodyparts[hits_what]
+      parts_taken.append(hits_what)
+      damage = randint(1, 2)
+      health[user] -= damage 
+      print(f"{interacting} {hits_how} your {hits_what}\n you feel your health decrease by {damage} as the {npcs[areaindex][1]} wins a hit")
+    #if user wins
+    elif fightchoices.index(user) == (fightchoices.index(npc) -1):
+      hits_what = random.choice(npcs_parts[interacting])
+      del npcs_parts[hits_what]
+      damage = randint(1, 2)
+      health[interacting] -= damage
+      print(f"you swipe at {interacting} and feel {npcs[interacting][6]} {hits_what} disintegrate from the holy light")
 
-if key in my_dict and index < len(my_dict[key]):
-    item = my_dict[key][index]
-    print(item)
-else:
-    print("Error: Key not found or index out of bounds.")
+
+#fight function
+def fight(interacting, npcs, health, bodyparts, areaindex, list_npcs):
+  if interacting in list_npcs:
+    print(f"you decide to fight {interacting}")
+    fightsequence(interacting, health, bodyparts, areaindex, npcs)
+  else:
+    print(f"you... smash the {interacting} on the rocky ground in anger")
+  print("u r not fighting npc")
+  fightsequence(interacting, health, bodyparts, areaindex, npcs)
+
+
+fight(interacting, npcs, health, bodyparts, areaindex, list_npcs)
