@@ -76,7 +76,7 @@ area_attribute = {
 }
 #health
 health = {
-  "bread":0,
+  "bread":1,
   "Coral":5,
   "Player":3,
   "clam":2
@@ -91,7 +91,7 @@ bodyparts = {
   "mass": "grabs at",
   "head": "yanks", 
   "eye": "pokes",
-  "stomach": "pushes", 
+  "you": "pushes", 
   "shin": "bruises"
 }
 
@@ -133,9 +133,25 @@ def new_area(areaindex, npc_desc):
 
 new_area(areaindex, npc_desc="")
 
+
+#fight function
+def fight(interacting, npcs, health, bodyparts, areaindex, list_npcs):
+  if interacting in list_npcs:
+    print(f"you decide to fight {interacting}")
+    fightsequence(interacting, health, bodyparts, areaindex, list_npcs)
+  else:
+    print(f"you... smash the {interacting} on the rocky ground in anger")
+  print("u r not fighting npc")
+  fightsequence(interacting, npcs, health, bodyparts, areaindex, list_npcs)
+
 #fighting npcs
 def fightsequence(interacting, health, bodyparts, areaindex, npcs):
   print("fight sequence begin")
+  #if you try to fight an item
+  if interacting not in list_npcs:
+    print(f"you... smash the {interacting} on the rocky ground in anger")
+    return
+    
   while health[interacting] > 0 and health["Player"] > 0:
     #move decisions
     fightchoices = ['rock', 'paper', 'scissors', 'rock']
@@ -143,36 +159,34 @@ def fightsequence(interacting, health, bodyparts, areaindex, npcs):
     npc = fightchoices[randint(0, 2)]
 
     print(f"{interacting} tries to {npc}")
-    parts_taken = ""
+    parts_taken = []
     if npc == user:
       print(f"you both try to {user}. Nothing happens.")
       #if npc wins randomise hit message + body part taken
     elif fightchoices.index(npc) == (fightchoices.index(user) -1):
-      hits_what = random.choice(list(bodyparts.keys()))
-      hits_how = hits_what[hits_what]
+      print("npc wins")
+      bodyparts_list = list(bodyparts.keys())
+      print(bodyparts_list)
+      print(type(bodyparts_list))
+      hits_what = bodyparts_list[randint(0, (len(bodyparts_list)-1))]
+      hits_how = bodyparts[hits_what]
       del bodyparts[hits_what]
       parts_taken.append(hits_what)
       damage = randint(1, 2)
-      health[user] -= damage 
+      health['Player'] -= damage 
       print(f"{interacting} {hits_how} your {hits_what}\n you feel your health decrease by {damage} as the {npcs[areaindex][1]} wins a hit")
     #if user wins
     elif fightchoices.index(user) == (fightchoices.index(npc) -1):
-      hits_what = random.choice(npcs_parts[interacting])
-      del npcs_parts[hits_what]
+      print("user wins")
+      bodyparts_list = npcs_parts[interacting]
+      hits_what = npcs_parts[interacting][randint(0, (len(npcs_parts[interacting])-1))]
+      print(hits_what)
+      print(type(npcs_parts))
+      del npcs_parts[interacting][hits_what]
       damage = randint(1, 2)
       health[interacting] -= damage
       print(f"you swipe at {interacting} and feel {npcs[interacting][6]} {hits_what} disintegrate from the holy light")
 
-
-#fight function
-def fight(interacting, npcs, health, bodyparts, areaindex, list_npcs):
-  if interacting in list_npcs:
-    print(f"you decide to fight {interacting}")
-    fightsequence(interacting, health, bodyparts, areaindex, npcs)
-  else:
-    print(f"you... smash the {interacting} on the rocky ground in anger")
-  print("u r not fighting npc")
-  fightsequence(interacting, health, bodyparts, areaindex, npcs)
 
 
 fight(interacting, npcs, health, bodyparts, areaindex, list_npcs)
