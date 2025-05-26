@@ -12,7 +12,8 @@ addingitem = ""
 dead_npcs = []
 inventory = ["socks"]
 noise_desc_neg = ["unholy", "shrieking", "peircing", "miserable", "pitiful", "low", "a high", "evidently pain-filled", "muffled"]
-noises_neg = ["shriek", "moan", "sound of pain", "cry", "rush"]
+noises_neg = ["shriek", "moan", "sounds of pain", "cry", "rush"]
+howdoes_neg = ["cut", "peirce", "hit", "scratch", "cry"]
 
 #dictionaries
 #areas
@@ -51,7 +52,7 @@ npcs_area = {
   8: []
 }
 npcs = {
-  #  0 name     1 stature       2 wearing          3 action              4 where            5 6 pronouns   7 friendship interest / 10
+  #        0 name     1 stature       2 wearing          3 action              4 where            5 6 pronouns   7 friendship interest / 10
   "Coral":["Coral", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
   "Persephone":["Persephone", "tall dark woman", "black mechanics fit", "engineering something in the cogswork", "under a vicious looking copper machine", "she", "her",  4],
   "Credit card cookie":["Coral2", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
@@ -90,7 +91,6 @@ bodyparts = {
   "mass": "grabs at",
   "head": "yanks", 
   "eye": "pokes",
-  "you": "pushes", 
   "shin": "bruises"
 }
 
@@ -139,7 +139,7 @@ def new_area(areaindex, npc_desc):
     return(areaindex)
 
 #conflict sequence
-def fightsequence(interacting, npcs, list_npcs, bodyparts, areaindex, noise_desc_neg, noises_neg, dead_npcs):
+def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg):
   print(f"you decide to fight {interacting}")
   #if you try to fight an item
   if interacting not in list_npcs:
@@ -149,31 +149,47 @@ def fightsequence(interacting, npcs, list_npcs, bodyparts, areaindex, noise_desc
   interacting_parts = npcs_parts[interacting]
   bodyparts_list = list(bodyparts.keys())
 
-  while len(bodyparts_list) > 0 and len(interacting_parts) > 0:
+  
     #move decisions   0          1         2
-    fight_options = ['paper', 'scissors', 'rock']
-    fight_outcomes = {
-      #     choice             win,             lose
-      fight_options[0]: [fight_options[2], fight_options[1]],
-      fight_options[1]: [fight_options[0], fight_options[2]],
-      fight_options[2]: [fight_options[1], fight_options[0]]
-    }
-    user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}\n")
+  fight_options = ['paper', 'scissors', 'rock']
+  fight_outcomes = {
+    #     choice             win,             lose
+    fight_options[0]: [fight_options[2], fight_options[1]],
+    fight_options[1]: [fight_options[0], fight_options[2]],
+    fight_options[2]: [fight_options[1], fight_options[0]]
+  }
+  parts_taken = []
+  parts = ""
+  
+  while len(bodyparts_list) > 0 and len(interacting_parts) > 0:
+    user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}\n").lower()
+
+    #checking minor misspellings e.g adding characters
+    while user not in fight_options:
+      print("soo thats not an option, please check spelling and have no puncuation, (e.g rock) now:\n")
+      user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}\n").lower()
     npc = fight_options[randint(0, 2)]
 
     #npc move
     print(f"{interacting} tries to {npc}")
-    parts_taken = []
     #who wins does what
+    #both do same --> both take damage
     if npc == user:
-      print(f"you both try to {user}. Neither damages the other")
+      hits_what = interacting_parts[randint(0, (len(interacting_parts)-1))]
+      interacting_parts.remove(hits_what)
+      print(f"you both try to {user}. you dematerialise {interacting}'s {hits_what},\n")
+      hits_what = bodyparts_list[randint(0, (len(bodyparts_list)-1))]
+      hits_how = bodyparts[hits_what]
+      bodyparts_list.remove(hits_what)
+      parts_taken.append(hits_what)
+      print(f"{npcs[interacting][5]} {hits_how} your {hits_what}")
       #if npc wins randomise hit message + body part taken
     elif fight_outcomes[user][1]:
       hits_what = bodyparts_list[randint(0, (len(bodyparts_list)-1))]
       hits_how = bodyparts[hits_what]
       bodyparts_list.remove(hits_what)
       parts_taken.append(hits_what)
-      print(f"{interacting} {hits_how} your {hits_what}.\n you watch as holy markings get consumed by the {npcs[interacting][1]}'s darkness")
+      print(f"{interacting} {hits_how} {hits_what}, \n your {hits_what}'s {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]} {noises_neg[randint(0, len(noises_neg)-1)]}'s {howdoes_neg[randint(0, len(howdoes_neg)-1)]} the air ")
     #if user wins
     elif fight_outcomes[user][0]:
       hits_what = interacting[randint(0, (len(interacting_parts)-1))]
@@ -186,13 +202,12 @@ def fightsequence(interacting, npcs, list_npcs, bodyparts, areaindex, noise_desc
     return("death")
   #if you win
   elif len(interacting_parts) < 1:
-    print(f"as you force the {hits_what} of the entity calling itself {interacting}'s to split apart a {noise_desc_neg[randint(0, len(noise_desc_neg))]} {noises_neg[randint(0, len(noises_neg))]} is heard")
+    print(f"as you force the {hits_what} of the entity calling itself {interacting}'s to split apart a {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]} {noises_neg[randint(0, len(noises_neg))]} is heard")
     dead_npcs.append(interacting)
     for i in range (len(parts_taken)-1):
       parts += parts_taken[i]
       parts += ", "
-    print(f"behind is left your {parts}\n you pick them up, slotting the limbs back into place and continuing your journey")
+    print(f"left behind is your {parts}\n you pick them up, slotting the limbs back into place and continuing your journey")
   return(dead_npcs)
 
-
-fightsequence(interacting, npcs, list_npcs, bodyparts, areaindex, noise_desc_neg, noises_neg, dead_npcs)
+fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg)
