@@ -9,13 +9,25 @@ addingitem = ""
 
 
 #lists
+npcs_met = []
 dead_npcs = []
 inventory = ["socks"]
 noise_desc_neg = ["unholy", "shrieking", "peircing", "miserable", "pitiful", "low", "a high", "evidently pain-filled", "muffled"]
 noises_neg = ["shriek", "moan", "sounds of pain", "cry", "rush"]
 howdoes_neg = ["cut", "peirce", "hit", "scratch", "cry"]
 
+other_items = ["seaweed", "rocks", "lipstick"]
+
 #dictionaries
+give_items = {
+  'spade': 'digger man', 
+  'earrings': 'child'
+}
+key_items = {
+  'rusty key': 'door',
+  'vial containing beetlejuice': 'ledge',
+  'computer':'scrapyard'
+}
 #areas
 areas = {
   1:"Hospital",
@@ -27,6 +39,7 @@ areas = {
   7:"Pit of despair",
   8:"Scrapyard",
 }
+
 
 #descriptions of each area
 area_description = {
@@ -42,7 +55,7 @@ area_description = {
 
 #NPCs in each area 
 npcs_area = {
-  1: ["coral"],
+  1: ["Coral"],
   2: ["Persephone"],
   3: [],
   4: [],
@@ -56,14 +69,14 @@ npcs = {
   "Coral":["Coral", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
   "Persephone":["Persephone", "tall dark woman", "black mechanics fit", "engineering something in the cogswork", "under a vicious looking copper machine", "she", "her",  4],
   "Credit card cookie":["Coral2", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  "name1":["aname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  "name2":["bname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
+  "digger man":["aname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
+  "child":["bname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
   "name3":["cname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
 }
 npcs_id = {}
 list_npcs = list(npcs.keys())
-print(f"list_npcs {list_npcs}")
 
+#giving all npcs an id number
 for i in range (len(list_npcs)):
   npcs_id.update({i: list_npcs[i]})
 print(npcs_id)
@@ -108,6 +121,13 @@ def additem(addingitem):
         print(f"you place the {addingitem} in your knapsack")
     inventory.append(addingitem)
 
+#when user has answer as 'give X'
+def giveitem(item, other_items, keyitems, giveitems):
+  if item in other_items:
+    print("yes")
+
+
+
 #player moves areas
 def new_area(areaindex, npc_desc):
   #if player is in the last area
@@ -134,9 +154,8 @@ def new_area(areaindex, npc_desc):
       else:
         print(f"...\n{npcs[areaindex][5]} tells you to piss off")
     else:
-      print("the place is void of any and all people")      
-
-    return(areaindex)
+      print("the place is void of any and all people")
+  return(areaindex)
 
 #conflict sequence
 def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg):
@@ -177,7 +196,7 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
     if npc == user:
       hits_what = interacting_parts[randint(0, (len(interacting_parts)-1))]
       interacting_parts.remove(hits_what)
-      print(f"you both try to {user}. you dematerialise {interacting}'s {hits_what},\n")
+      print(f"you both try to {user}. you dematerialise {interacting}'s {hits_what},")
       hits_what = bodyparts_list[randint(0, (len(bodyparts_list)-1))]
       hits_how = bodyparts[hits_what]
       bodyparts_list.remove(hits_what)
@@ -189,7 +208,8 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
       hits_how = bodyparts[hits_what]
       bodyparts_list.remove(hits_what)
       parts_taken.append(hits_what)
-      print(f"{interacting} {hits_how} {hits_what}, \n your {hits_what}'s {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]} {noises_neg[randint(0, len(noises_neg)-1)]}'s {howdoes_neg[randint(0, len(howdoes_neg)-1)]} the air ")
+      print(f"{interacting} {hits_how} {hits_what}, \n your {hits_what}'s {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]}",
+      f"{noises_neg[randint(0, len(noises_neg)-1)]}'s {howdoes_neg[randint(0, len(howdoes_neg)-1)]} the air as it is taken")
     #if user wins
     elif fight_outcomes[user][0]:
       hits_what = interacting[randint(0, (len(interacting_parts)-1))]
@@ -201,7 +221,7 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
     print("you ded")
     return("death")
   #if you win
-  elif len(interacting_parts) < 1:
+  else:
     print(f"as you force the {hits_what} of the entity calling itself {interacting}'s to split apart a {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]} {noises_neg[randint(0, len(noises_neg))]} is heard")
     dead_npcs.append(interacting)
     for i in range (len(parts_taken)-1):
@@ -209,5 +229,3 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
       parts += ", "
     print(f"left behind is your {parts}\n you pick them up, slotting the limbs back into place and continuing your journey")
   return(dead_npcs)
-
-fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg)
