@@ -1,7 +1,8 @@
 #coding standard for lv2
 #insert cool docs string
 from random import *
-import time
+import time as tme
+import sys
 
 #variables
 areaindex = 1
@@ -16,31 +17,39 @@ inventory = ["socks"]
 noise_desc_neg = ["unholy", "shrieking", "peircing", "miserable", "pitiful", "low", "a high", "evidently pain-filled", "muffled"]
 noises_neg = ["shriek", "moan", "sounds of pain", "cry", "rush"]
 howdoes_neg = ["cut", "peirce", "hit", "scratch", "cry"]
-
+#non key items in the game
 other_items = ["seaweed", "rocks", "lipstick"]
 
 #dictionaries
+#items given to a specific NPC
 give_items = {
   'spade': 'digger man', 
   'earrings': 'child'
 }
+#items needed at a specific place
 key_items = {
   'rusty key': 'door',
   'vial containing beetlejuice': 'ledge',
   'computer':'scrapyard'
 }
+
 #areas
 areas = {
   1:"Hospital",
   2:"Seaweed farm",
   3:"Cogworks",
   4:"Dark tunnel",
-  5:"Canteen",
+  5:"Drain",
   6:"Nuclear reactor",
   7:"Pit of despair",
   8:"Scrapyard",
 }
 
+#items & their location, incl ALL items
+item_origin = {
+  "spade": areas[1], 
+  "earrings": areas[5]
+}
 
 #descriptions of each area
 area_description = {
@@ -114,9 +123,18 @@ npcs_parts = {
 }
 
 #functions
+#add delay between each letter to make it look like something is typing
+def entity_types(msg):
+    for char in msg:
+        delay = (randint(1, 10))/80
+        #used to make sure chars dont print on a newline EVERY.SINGLE.TIME.
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        tme.sleep(delay)
+
+
 def death():
   print("you have died.")
-
   quit()
 #add an item to the players inventory
 def additem(addingitem):
@@ -126,19 +144,25 @@ def additem(addingitem):
         print(f"you place the {addingitem} in your knapsack")
     inventory.append(addingitem)
 
+def npc_item_response(interacting, item):
+  if npcs[interacting][7] > 7:
+    print(yay)
+
 #when user has answer as 'give X'
-def giveitem(interacting, npcs, item, other_items, item_origin, keyitems, giveitems):
+def giveitem(interacting, item, npcs, keyitems, giveitems, other_items, item_origin):
   warnings = 0
-  if item in other_items:
+  if item in other_items or giveitems[item]==interacting:
     print(f"you give {interacting} the {item} from {item_origin[item]}")
+    print(npc_item_response[item][interacting])
   elif item in keyitems:
-    print(f"you want to give {interacting} the {item}, yet you feel a force keeping you in place, telling you this item is to important to give away")
+    print(f"you want to give {interacting} the {item}, yet you feel a force keeping you in place, telling you this item is too important to give away")
     warnings += 1
     if warnings > 3:
-      print(f"The Voice Of God enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1]} A {item.upper()}")
+      entity_types(f"The Voice Of God enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1].upper()} A {item.upper()}")
       if warnings >= 5:
-        print("ok FUCK YOU you small BEING, YOU ARE MINISCULE and INSIGNIFICANT in my GRAND PLANS now FUCK THE HELL OFF TO DEATH")
-        death()
+        entity_types("ok FLIP YOU you small BEING, you are MINISCULE and INSIGNIFICANT in my GRAND PLANS now FUDGENUGGETS the H E DOUBLE HOCKEY STICKS OUTTA HERE")
+  else: 
+    print("you need this somewhere else...")
 
 
 
@@ -176,7 +200,7 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
   print(f"you decide to fight {interacting}")
   #if you try to fight an item
   if interacting not in list_npcs:
-    print(f"you... smash the {interacting} on the rocky ground in anger")
+    entity_types(f"you... smash the {interacting} on the rocky ground in anger")
     return
   
   interacting_parts = npcs_parts[interacting]
@@ -231,8 +255,7 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
       print(f"you swipe at {interacting} and feel {npcs[interacting][6]} {hits_what} disintegrate from the holy light shining from the tattoos covering your body")
   #if npc wins die
   if len(bodyparts_list) < 1:
-    #death()
-    print("you ded")
+    death()
     return("death")
   #if you win
   else:
@@ -241,6 +264,6 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
     for i in range (len(parts_taken)-1):
       parts += parts_taken[i]
       parts += ", "
-    print(f"left behind is your {parts}\n you pick them up, slotting the limbs back into place and continuing your journey")
-  return(dead_npcs)
+    print(f"left behind is your {parts}\n you pick them up, carrying them in your arms")
+  return(dead_npcs, parts)
 
