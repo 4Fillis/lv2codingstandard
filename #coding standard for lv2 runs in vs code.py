@@ -1,6 +1,7 @@
 #coding standard for lv2
 #insert cool docs string
 from random import *
+import time
 
 #variables
 areaindex = 1
@@ -113,6 +114,10 @@ npcs_parts = {
 }
 
 #functions
+def death():
+  print("you have died.")
+
+  quit()
 #add an item to the players inventory
 def additem(addingitem):
     if addingitem in inventory:
@@ -122,9 +127,18 @@ def additem(addingitem):
     inventory.append(addingitem)
 
 #when user has answer as 'give X'
-def giveitem(item, other_items, keyitems, giveitems):
+def giveitem(interacting, npcs, item, other_items, item_origin, keyitems, giveitems):
+  warnings = 0
   if item in other_items:
-    print("yes")
+    print(f"you give {interacting} the {item} from {item_origin[item]}")
+  elif item in keyitems:
+    print(f"you want to give {interacting} the {item}, yet you feel a force keeping you in place, telling you this item is to important to give away")
+    warnings += 1
+    if warnings > 3:
+      print(f"The Voice Of God enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1]} A {item.upper()}")
+      if warnings >= 5:
+        print("ok FUCK YOU you small BEING, YOU ARE MINISCULE and INSIGNIFICANT in my GRAND PLANS now FUCK THE HELL OFF TO DEATH")
+        death()
 
 
 
@@ -229,3 +243,4 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
       parts += ", "
     print(f"left behind is your {parts}\n you pick them up, slotting the limbs back into place and continuing your journey")
   return(dead_npcs)
+
