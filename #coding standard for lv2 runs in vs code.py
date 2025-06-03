@@ -19,6 +19,7 @@ noises_neg = ["shriek", "moan", "sounds of pain", "cry", "rush"]
 howdoes_neg = ["cut", "peirce", "hit", "scratch", "cry"]
 #non key items in the game
 other_items = ["seaweed", "rocks", "lipstick"]
+insults = ["small being", "donkey", "bag of flour", "underbaked cookie", "dingus", "stilly"]
 
 #dictionaries
 #items given to a specific NPC
@@ -146,10 +147,16 @@ def additem(addingitem):
 
 def npc_item_response(interacting, item):
   if npcs[interacting][7] > 7:
-    print(yay)
+    print(f"Thank you! You are too kind, I shall treasure this {item}")
+  elif npcs[interacting][7] >= 5:
+    print(f"Thanks for the {item}... :)")
+
+
+
+
 
 #when user has answer as 'give X'
-def giveitem(interacting, item, npcs, keyitems, giveitems, other_items, item_origin):
+def giveitem(item, interacting, npcs, keyitems, giveitems, other_items, item_origin, insults):
   warnings = 0
   if item in other_items or giveitems[item]==interacting:
     print(f"you give {interacting} the {item} from {item_origin[item]}")
@@ -160,7 +167,7 @@ def giveitem(interacting, item, npcs, keyitems, giveitems, other_items, item_ori
     if warnings > 3:
       entity_types(f"The Voice Of God enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1].upper()} A {item.upper()}")
       if warnings >= 5:
-        entity_types("ok FLIP YOU you small BEING, you are MINISCULE and INSIGNIFICANT in my GRAND PLANS now FUDGENUGGETS the H E DOUBLE HOCKEY STICKS OUTTA HERE")
+        entity_types(f"ok FLIP YOU you small BEING, you {insults[randint(0, len(insults)-1)]} and INSIGNIFICANT in my GRAND PLANS now FUDGENUGGETS the H E DOUBLE HOCKEY STICKS OUTTA HERE")
   else: 
     print("you need this somewhere else...")
 
@@ -266,4 +273,3 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
       parts += ", "
     print(f"left behind is your {parts}\n you pick them up, carrying them in your arms")
   return(dead_npcs, parts)
-
