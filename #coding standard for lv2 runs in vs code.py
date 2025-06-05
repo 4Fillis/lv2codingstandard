@@ -1,6 +1,7 @@
 #coding standard for lv2
 #insert cool docs string
-from random import *
+import random 
+from random import randint
 import time as tme
 import sys
 
@@ -8,6 +9,7 @@ import sys
 areaindex = 1
 interacting = "Coral"
 addingitem = ""
+insult = ""
 
 
 #lists
@@ -16,10 +18,13 @@ dead_npcs = []
 inventory = ["socks"]
 noise_desc_neg = ["unholy", "shrieking", "peircing", "miserable", "pitiful", "low", "a high", "evidently pain-filled", "muffled"]
 noises_neg = ["shriek", "moan", "sounds of pain", "cry", "rush"]
-howdoes_neg = ["cut", "peirce", "hit", "scratch", "cry"]
+howdoes_neg = ["cut", "peirce", "hit", "scratch", "stab"]
 #non key items in the game
 other_items = ["seaweed", "rocks", "lipstick"]
-insults = ["small being", "donkey", "bag of flour", "underbaked cookie", "dingus", "stilly"]
+
+insults1 = ["jam", "bird", "weak", "annoying", "underbaked", "peirced"]
+insults2 = ["brained", "filled", "bag of", "limbed"]
+insults3 = ["fool", "child", "elderich horror", "skin"]
 
 #dictionaries
 #items given to a specific NPC
@@ -124,57 +129,79 @@ npcs_parts = {
 }
 
 #functions
+def newln():
+  print("\n")
+
+#insult
+def generate_insults(insult, insults1, insults2, insults3):
+  i1 = random.choice(insults1)
+  i2 = random.choice(insults2)
+  i3 = random.choice(insults3)
+  insult = i1 + " " + i2 + " "+ i3
+  return(insult)
+
+
 #add delay between each letter to make it look like something is typing
 def entity_types(msg):
-    for char in msg:
-        delay = (randint(1, 10))/80
-        #used to make sure chars dont print on a newline EVERY.SINGLE.TIME.
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        tme.sleep(delay)
-
+  newln()
+  for char in msg:
+      delay = (randint(1, 10))/80
+      #used to make sure chars dont print on a newline EVERY.SINGLE.TIME.
+      sys.stdout.write(char)
+      sys.stdout.flush()
+      tme.sleep(delay)
 
 def death():
+  newln()
   print("you have died.")
   quit()
+
 #add an item to the players inventory
 def additem(addingitem):
+    newln()
     if addingitem in inventory:
         print(f"you add another {addingitem} to your knapsack")
     else:
         print(f"you place the {addingitem} in your knapsack")
     inventory.append(addingitem)
 
-def npc_item_response(interacting, item):
+def npc_item_response(item, interacting):
+  newln()
+  print(interacting)
+  newln()
   if npcs[interacting][7] > 7:
     print(f"Thank you! You are too kind, I shall treasure this {item}")
-  elif npcs[interacting][7] >= 5:
-    print(f"Thanks for the {item}... :)")
-
-
-
+  elif npcs[interacting][7] > 4:
+    print(f"Thanks for the {item}! :)")
+  elif npcs[interacting][7] >= 2:
+    print(f".... right ok uh a {item}... nice... thanks..?")
+  else:
+    generate_insults()
+    print(f"CURSE YOU AND YOUR {insult.upper} FOR GIVING ME THIS {item.upper()}")
+  return()
 
 
 #when user has answer as 'give X'
-def giveitem(item, interacting, npcs, keyitems, giveitems, other_items, item_origin, insults):
+def giveitem(item, interacting, npcs, keyitems, giveitems, other_items, item_origin, insult):
   warnings = 0
   if item in other_items or giveitems[item]==interacting:
     print(f"you give {interacting} the {item} from {item_origin[item]}")
-    print(npc_item_response[item][interacting])
+    npc_item_response(item, interacting)
   elif item in keyitems:
     print(f"you want to give {interacting} the {item}, yet you feel a force keeping you in place, telling you this item is too important to give away")
     warnings += 1
     if warnings > 3:
       entity_types(f"The Voice Of God enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1].upper()} A {item.upper()}")
       if warnings >= 5:
-        entity_types(f"ok FLIP YOU you small BEING, you {insults[randint(0, len(insults)-1)]} and INSIGNIFICANT in my GRAND PLANS now FUDGENUGGETS the H E DOUBLE HOCKEY STICKS OUTTA HERE")
+        generate_insults(insult, insults1, insults2, insults3)
+        entity_types(f"ok FLIP YOU you {insult.upper}, my GRAND PLANS... :( PLEASE LEAVE")
   else: 
     print("you need this somewhere else...")
 
 
-
 #player moves areas
 def new_area(areaindex, npc_desc):
+  newln()
   #if player is in the last area
   if areaindex == 8:
     print("end of game")
@@ -213,8 +240,7 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
   interacting_parts = npcs_parts[interacting]
   bodyparts_list = list(bodyparts.keys())
 
-  
-    #move decisions   0          1         2
+  #move decisions   0          1         2
   fight_options = ['paper', 'scissors', 'rock']
   fight_outcomes = {
     #     choice             win,             lose
@@ -226,12 +252,15 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
   parts = ""
   
   while len(bodyparts_list) > 0 and len(interacting_parts) > 0:
-    user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}\n").lower()
+    user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
+    newln()
 
-    #checking minor misspellings e.g adding characters
+    #checking if valid input
     while user not in fight_options:
-      print("soo thats not an option, please check spelling and have no puncuation, (e.g rock) now:\n")
-      user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}\n").lower()
+      print("soo thats not an option, please check spelling and have no puncuation, (e.g rock) now:")
+      newln()
+      user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
+      newln()
     npc = fight_options[randint(0, 2)]
 
     #npc move
@@ -239,34 +268,33 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
     #who wins does what
     #both do same --> both take damage
     if npc == user:
-      hits_what = interacting_parts[randint(0, (len(interacting_parts)-1))]
+      hits_what = random.choice(interacting_parts)
       interacting_parts.remove(hits_what)
       print(f"you both try to {user}. you dematerialise {interacting}'s {hits_what},")
-      hits_what = bodyparts_list[randint(0, (len(bodyparts_list)-1))]
+      hits_what = random.choice(bodyparts_list)
       hits_how = bodyparts[hits_what]
       bodyparts_list.remove(hits_what)
       parts_taken.append(hits_what)
       print(f"{npcs[interacting][5]} {hits_how} your {hits_what}")
       #if npc wins randomise hit message + body part taken
     elif fight_outcomes[user][1]:
-      hits_what = bodyparts_list[randint(0, (len(bodyparts_list)-1))]
+      hits_what = random.choice(bodyparts_list)
       hits_how = bodyparts[hits_what]
       bodyparts_list.remove(hits_what)
       parts_taken.append(hits_what)
-      print(f"{interacting} {hits_how} {hits_what}, \n your {hits_what}'s {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]}",
-      f"{noises_neg[randint(0, len(noises_neg)-1)]}'s {howdoes_neg[randint(0, len(howdoes_neg)-1)]} the air as it is taken")
+      print(f"{interacting} {hits_how} {hits_what}, \n your {hits_what}'s {random.choice(noise_desc_neg)}",
+      f"{random.choice(noises_neg)}'s {random.choice(howdoes_neg)} the air as it is taken")
     #if user wins
     elif fight_outcomes[user][0]:
-      hits_what = interacting[randint(0, (len(interacting_parts)-1))]
+      hits_what = random.choice(interacting_parts)
       interacting_parts.remove(hits_what)
-      print(f"you swipe at {interacting} and feel {npcs[interacting][6]} {hits_what} disintegrate from the holy light shining from the tattoos covering your body")
+      print(f"you swipe at {interacting} and feel {npcs[interacting][6]} {hits_what} disintegrate from the holy light shining from the markings covering your body")
   #if npc wins die
   if len(bodyparts_list) < 1:
     death()
-    return("death")
   #if you win
   else:
-    print(f"as you force the {hits_what} of the entity calling itself {interacting}'s to split apart a {noise_desc_neg[randint(0, len(noise_desc_neg)-1)]} {noises_neg[randint(0, len(noises_neg))]} is heard")
+    print(f"as you finally defeat {interacting} a {random.choice(noise_desc_neg)} {random.choice(noises_neg)} is heard")
     dead_npcs.append(interacting)
     for i in range (len(parts_taken)-1):
       parts += parts_taken[i]
