@@ -1,3 +1,4 @@
+name = "maria"
 
 #dictionaries
 bodyparts = {
@@ -12,12 +13,33 @@ bodyparts = {
   "eye": "pokes",
   "shin": "bruises"
 }
+inventory = ["sock", "healing liquid", "healing liquid"]
 parts_taken = ["left arm", "golden eye", "false leg", "mass", "head", "yep", "a", "b", "c" ,"d"]
+items_healing = {
+    "healing liquid": 5,
+    "cake": 2
+}
 def newln():
   print("\n")
 def death():
     print("you have died")
     quit()
+
+def heal(inventory, items_healing):
+    answer = ""
+    items_heal = inventory.count("healing liquid")
+    while answer != "yes" and answer != "no":
+        print("please answer 'yes' or 'no'")
+        answer = input(f"Would you like to heal? you have {items_heal} vials of healing liquid").lower
+    if answer == 'yes':
+        #item user wants to use to heal
+        key = "healing liquid"
+        inventory.remove(key)
+        for i in range(items_healing[key]):
+            parts_taken
+
+
+
 #function to check players hp
 def healthcheck(parts_taken, bodyparts, name):
     health_max = len(bodyparts)
@@ -27,21 +49,23 @@ def healthcheck(parts_taken, bodyparts, name):
     
     if health_percent >= 100:
         print("you feel: spectacular, forge onwards!")
-    #increments, messages based on health %
-    elif health_percent >= 75:
-        print(f"you are finee")
-    elif health_percent >= 50:
-        print(f"status = mehh, ok above average")
-    elif health_percent >= 25:
-        print(f"Advice: heal")
-    elif health_percent > 0:
-        print(f"you're wounds have taken a heavy toll\n"
-            "Advice: do not to continue without sufficient healing")
     else:
-        print("ERROR entity_living == false")
-        print("you collapse on the ground as you're wounds prove too much to handle")
-        death()
+    #increments, messages based on health %
+        if health_percent >= 75:
+            print(f"you are finee")
+        elif health_percent >= 50:
+            print(f"status = mehh, ok above average")
+        elif health_percent >= 25:
+            print(f"Advice: heal")
+        elif health_percent > 0:
+            print(f"your wounds have taken a heavy toll\n"
+            "Advice: do not to continue without sufficient healing")
+        else:
+            print("ERROR entity_living == false")
+            print("you collapse on the ground as you're wounds prove too much to handle")
+            death()
+        heal(inventory, items_healing)
+    return()
+        
 
-    #INSERT OPTION TO DRINK HEALTH POTION
-
-healthcheck(parts_taken, bodyparts, name="maria")
+healthcheck(parts_taken, bodyparts, name, inventory, items_healing)
