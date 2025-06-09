@@ -10,6 +10,7 @@ areaindex = 1
 interacting = "Coral"
 addingitem = ""
 insult = ""
+name = ""
 
 
 #lists
@@ -91,6 +92,19 @@ npcs = {
 }
 npcs_id = {}
 list_npcs = list(npcs.keys())
+
+#items and ID
+items_heal = {
+  "healing liquid": 5,
+  "cake": 2
+}
+items_heal_id = {}
+list_items_heal = list(items_heal.keys())
+
+#giving items an id number
+for i in range (len(items_heal)):
+  items_heal_id.update({i: list_items_heal[i]})
+print(items_heal_id)
 
 #giving all npcs an id number
 for i in range (len(list_npcs)):
@@ -230,7 +244,7 @@ def new_area(areaindex, npc_desc):
   return(areaindex)
 
 #conflict sequence
-def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg):
+def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg, name):
   print(f"you decide to fight {interacting}")
   #if you try to fight an item
   if interacting not in list_npcs:
@@ -300,4 +314,51 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
       parts += parts_taken[i]
       parts += ", "
     print(f"left behind is your {parts}\n you pick them up, carrying them in your arms")
+    #healthcheck part of fight function
+    health_max = len(bodyparts)
+    health = health_max - len(parts_taken)
+    health_percent = (health/health_max)*100
+    print(f"{name}, you have {health_percent}% health")
+    
+    if health_percent >= 100:
+        print("you feel: spectacular, forge onwards!")
+    else:
+    #increments, messages based on health %
+        if health_percent >= 75:
+            print(f"you are finee")
+        elif health_percent >= 50:
+            print(f"status = mehh, ok above average")
+        elif health_percent >= 25:
+            print(f"Advice: heal")
+        elif health_percent > 0:
+            print(f"your wounds have taken a heavy toll\n"
+            "Advice: do not to continue without sufficient healing")
+        else:
+            print("ERROR entity_living == false")
+            print("you collapse on the ground as you're wounds prove too much to handle")
+            death()
+  #healing part of fight function  
+  ans = ""
+  items_heal_amt = 0
+  for i in range(len(items_heal)-1):
+    items_heal_amt += inventory.count(items_heal_id[i])
+
+  while ans != "yes" and ans != "no":
+      print("please answer 'yes' or 'no'")
+      ans = input(f"Would you like to heal? you have {items_heal_amt} things you can help yourself with").lower
+      if ans == 'yes' and items_heal_amt > 0:
+        #item user wants to use to heal
+        ans = input("What would you like to do?").lower
+        key = "healing liquid"
+        inventory.remove(key)
+        for i in range(items_heal[key]):
+          parts_taken
+      else:
+        print("sorry, you don't have anything to help")
   return(dead_npcs, parts)
+
+items_using = {
+  "bandages": "wrap your wounds", 
+  "healing liquid" : "drink a vial of healing liquid", 
+  "cake": "eat some cake and feel better", 
+}
