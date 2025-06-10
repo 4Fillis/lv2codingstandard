@@ -244,16 +244,18 @@ def new_area(areaindex, npc_desc):
   return(areaindex)
 
 #conflict sequence
-def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_desc_neg, noises_neg, dead_npcs, howdoes_neg, name):
-  print(f"you decide to fight {interacting}")
-  #if you try to fight an item
+def fightsequence(interacting, list_npcs):
+  #variables
+  user_pts = 0
+  npc_pts = 0
+  win_pts = 3
+
+  print(f"you decide to engage {interacting} in a battle of paper scissors rock!")
+  #if you try to battle an item
   if interacting not in list_npcs:
-    entity_types(f"you... smash the {interacting} on the rocky ground in anger")
+    entity_types(f"you... win the battle with the {interacting} because it's a {interacting}")
     return
   
-  interacting_parts = npcs_parts[interacting]
-  bodyparts_list = list(bodyparts.keys())
-
   #move decisions   0          1         2
   fight_options = ['paper', 'scissors', 'rock']
   fight_outcomes = {
@@ -262,103 +264,41 @@ def fightsequence(interacting, npcs, npcs_parts, list_npcs, bodyparts, noise_des
     fight_options[1]: [fight_options[0], fight_options[2]],
     fight_options[2]: [fight_options[1], fight_options[0]]
   }
-  parts_taken = []
-  parts = ""
   
-  while len(bodyparts_list) > 0 and len(interacting_parts) > 0:
-    user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
+  #explanation
+  print(f"Welcome to {fight_options[0]}, {fight_options[1]}, {fight_options[2]}")
+  while user_pts < win_pts and npc_pts < win_pts:
+    user_move = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
     newln()
 
     #checking if valid input
-    while user not in fight_options:
+    while user_move not in fight_options:
       print("soo thats not an option, please check spelling and have no puncuation, (e.g rock) now:")
       newln()
-      user = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
+      user_move = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
       newln()
-    npc = fight_options[randint(0, 2)]
+    npc_move = fight_options[randint(0, 2)]
 
     #npc move
-    print(f"{interacting} tries to {npc}")
+    print(f"{interacting} tries to {npc_move}")
     #who wins does what
     #both do same --> both take damage
-    if npc == user:
-      hits_what = random.choice(interacting_parts)
-      interacting_parts.remove(hits_what)
-      print(f"you both try to {user}. you dematerialise {interacting}'s {hits_what},")
-      hits_what = random.choice(bodyparts_list)
-      hits_how = bodyparts[hits_what]
-      bodyparts_list.remove(hits_what)
-      parts_taken.append(hits_what)
-      print(f"{npcs[interacting][5]} {hits_how} your {hits_what}")
-      #if npc wins randomise hit message + body part taken
-    elif fight_outcomes[user][1]:
-      hits_what = random.choice(bodyparts_list)
-      hits_how = bodyparts[hits_what]
-      bodyparts_list.remove(hits_what)
-      parts_taken.append(hits_what)
-      print(f"{interacting} {hits_how} {hits_what}, \n your {hits_what}'s {random.choice(noise_desc_neg)}",
-      f"{random.choice(noises_neg)}'s {random.choice(howdoes_neg)} the air as it is taken")
+    if npc_move == user_move:
+      print(f"You both try to {npc_move}! No points are won")
+      print(f"You have {user_pts} pts, {interacting} has {npc_pts}")
+      #if npc wins 
+    elif fight_outcomes[user_move][1]:
+      print(f"{interacting} {npc_move}'s your {user_move} scoring a point")
     #if user wins
-    elif fight_outcomes[user][0]:
-      hits_what = random.choice(interacting_parts)
-      interacting_parts.remove(hits_what)
-      print(f"you swipe at {interacting} and feel {npcs[interacting][6]} {hits_what} disintegrate from the holy light shining from the markings covering your body")
-  #if npc wins die
-  if len(bodyparts_list) < 1:
-    death()
-  #if you win
-  else:
-    print(f"as you finally defeat {interacting} a {random.choice(noise_desc_neg)} {random.choice(noises_neg)} is heard")
-    dead_npcs.append(interacting)
-    for i in range (len(parts_taken)-1):
-      parts += parts_taken[i]
-      parts += ", "
-    print(f"left behind is your {parts}\n you pick them up, carrying them in your arms")
-    #healthcheck part of fight function
-    health_max = len(bodyparts)
-    health = health_max - len(parts_taken)
-    health_percent = (health/health_max)*100
-    print(f"{name}, you have {health_percent}% health")
-    
-    if health_percent >= 100:
-        print("you feel: spectacular, forge onwards!")
+    elif fight_outcomes[user_move][0]:
+      print(f"You {user_move} {interacting}s {npc_move} scoring a point!")
+
+    #Points
+    print(f"You have {user_pts}/{win_pts} needed to win, {interacting} has {npc_pts}")
+      
+    #if npc wins user loses
+    if npc_pts > win_pts:
+      death()
+    #if you win
     else:
-    #increments, messages based on health %
-        if health_percent >= 75:
-            print(f"you are finee")
-        elif health_percent >= 50:
-            print(f"status = mehh, ok above average")
-        elif health_percent >= 25:
-            print(f"Advice: heal")
-        elif health_percent > 0:
-            print(f"your wounds have taken a heavy toll\n"
-            "Advice: do not to continue without sufficient healing")
-        else:
-            print("ERROR entity_living == false")
-            print("you collapse on the ground as you're wounds prove too much to handle")
-            death()
-  #healing part of fight function  
-  ans = ""
-  items_heal_amt = 0
-  for i in range(len(items_heal)-1):
-    items_heal_amt += inventory.count(items_heal_id[i])
-
-  while ans != "yes" and ans != "no":
-      print("please answer 'yes' or 'no'")
-      ans = input(f"Would you like to heal? you have {items_heal_amt} things you can help yourself with").lower
-      if ans == 'yes' and items_heal_amt > 0:
-        #item user wants to use to heal
-        ans = input("What would you like to do?").lower
-        key = "healing liquid"
-        inventory.remove(key)
-        for i in range(items_heal[key]):
-          parts_taken
-      else:
-        print("sorry, you don't have anything to help")
-  return(dead_npcs, parts)
-
-items_using = {
-  "bandages": "wrap your wounds", 
-  "healing liquid" : "drink a vial of healing liquid", 
-  "cake": "eat some cake and feel better", 
-}
+      print(f"You win the battle!")
