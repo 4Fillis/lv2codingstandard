@@ -52,7 +52,7 @@ areas = {
   8:"Scrapyard",
 }
 
-deft_paths = {
+deft_dir = {
   "left"   : "blank wall", 
   "right"  : "blank wall",
   "forward": "blank wall", 
@@ -60,9 +60,14 @@ deft_paths = {
   "down"   : "floor"
 }
 paths_dict = {
-  #area        left             right               forward             up        down
-  "Hospital": ["bathroom",   deft_paths["right"],  "a grey door"     deft_paths["up"]    "floor"],
-  "Bathroom": []
+  #area           0 left        1 right          2 forward         3 up        4 down
+  "hospital"   : ["bathroom",      0,           "grey door",         0,           0],
+  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
+  "grey door"  : ["hallway 1",     0,           "sink",              0,           0], 
+  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
+  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
+  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
+  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
 }
 
 #items & their location, incl ALL items
