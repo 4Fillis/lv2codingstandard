@@ -52,6 +52,19 @@ areas = {
   8:"Scrapyard",
 }
 
+deft_paths = {
+  "left"   : "blank wall", 
+  "right"  : "blank wall",
+  "forward": "blank wall", 
+  "up"     : "ceiling", 
+  "down"   : "floor"
+}
+paths_dict = {
+  #area        left             right               forward             up        down
+  "Hospital": ["bathroom",   deft_paths["right"],  "a grey door"     deft_paths["up"]    "floor"],
+  "Bathroom": []
+}
+
 #items & their location, incl ALL items
 item_origin = {
   "spade": areas[1], 
@@ -82,13 +95,13 @@ npcs_area = {
   8: []
 }
 npcs = {
-  #        0 name     1 stature       2 wearing          3 action              4 where            5 6 pronouns   7 friendship interest / 10
-  "Coral":["Coral", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  "Persephone":["Persephone", "tall dark woman", "black mechanics fit", "engineering something in the cogswork", "under a vicious looking copper machine", "she", "her",  4],
-  "Credit card cookie":["Coral2", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  "digger man":["aname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  "child":["bname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
-  "name3":["cname", "small woman", "pink lab coat", "mixing chemicals", "on a table in the corner", "she", "her", 9],
+  #                      0 name                    1 stature              2 wearing                 3 action                                    4 where                                5 6 prns     7 friendship interest / 10
+  "Coral":             ["Coral",                 "small woman",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
+  "Persephone":        ["Persephone",            "tall dark woman",    "black mechanics fit",   "twisting a gear in the cogswork",        "under a vicious looking copper machine",   "she", "her",  4],
+  "Credit card cookie":["Credit card cookie",    "small doughy being", "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
+  "Hanneman":          ["Hanneman",              "man",                "top hat",               "flirting with himself",                  "in a mirror",                              "he",  "him",  0],
+  "child":             ["child",                 "small woman",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
+  "Diggerman":         ["Diggerman",             "small mole like creature",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
 }
 npcs_id = {}
 list_npcs = list(npcs.keys())
@@ -194,7 +207,6 @@ def npc_item_response(item, interacting):
     print(f"CURSE YOU AND YOUR {insult.upper} FOR GIVING ME THIS {item.upper()}")
   return()
 
-
 #when user has answer as 'give X'
 def giveitem(item, interacting, npcs, keyitems, giveitems, other_items, item_origin, insult):
   warnings = 0
@@ -211,7 +223,6 @@ def giveitem(item, interacting, npcs, keyitems, giveitems, other_items, item_ori
         entity_types(f"ok FLIP YOU you {insult.upper}, my GRAND PLANS... :( PLEASE LEAVE")
   else: 
     print("you need this somewhere else...")
-
 
 #player moves areas
 def new_area(areaindex, npc_desc):
@@ -251,7 +262,7 @@ def fightsequence(interacting, list_npcs):
   win_pts = 3
 
   print(f"you decide to engage {interacting} in a battle of paper scissors rock!")
-  #if you try to battle an item
+  #you try to battle an item
   if interacting not in list_npcs:
     entity_types(f"you... win the battle with the {interacting} because it's a {interacting}")
     return
@@ -271,7 +282,7 @@ def fightsequence(interacting, list_npcs):
     user_move = input(f"Would you like to: {fight_options[0]}, {fight_options[1]}, or {fight_options[2]}").lower()
     newln()
 
-    #checking if valid input
+    #checking valid input
     while user_move not in fight_options:
       print("soo thats not an option, please check spelling and have no puncuation, (e.g rock) now:")
       newln()
@@ -286,19 +297,20 @@ def fightsequence(interacting, list_npcs):
     if npc_move == user_move:
       print(f"You both try to {npc_move}! No points are won")
       print(f"You have {user_pts} pts, {interacting} has {npc_pts}")
-      #if npc wins 
+      #npc wins 
     elif fight_outcomes[user_move][1]:
       print(f"{interacting} {npc_move}'s your {user_move} scoring a point")
-    #if user wins
+    #user wins
     elif fight_outcomes[user_move][0]:
       print(f"You {user_move} {interacting}s {npc_move} scoring a point!")
 
     #Points
     print(f"You have {user_pts}/{win_pts} needed to win, {interacting} has {npc_pts}")
       
-    #if npc wins user loses
+    #npc wins user loses
     if npc_pts > win_pts:
       death()
-    #if you win
+    #you win
     else:
       print(f"You win the battle!")
+
