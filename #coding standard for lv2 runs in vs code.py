@@ -60,14 +60,15 @@ deft_dir = {
   "down"   : "floor"
 }
 paths_dict = {
-  #area           0 left        1 right          2 forward         3 up        4 down
-  "hospital"   : ["bathroom",      0,           "grey door",         0,           0],
-  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
-  "grey door"  : ["hallway 1",     0,           "sink",              0,           0], 
-  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
-  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
-  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
-  "bathroom"   : ["toilet",        0,           "sink",              0,           0], 
+  #area           0 forwards, 1 left, 2 right 3 backwards
+  "your room": [0, "rainbow door", "bathroom", 0, 0],
+  "rainbow door": [0, "sea themed hallway", "hallway with flower wallpaper" , 0],
+  "sea themed hallway": [0, 0, "stairs", "rainbow door"],
+  "stairs"     : ["hallway 1",     0,           "sink",              0,           0], 
+  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
+  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
+  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
+  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
 }
 
 #items & their location, incl ALL items
@@ -103,10 +104,9 @@ npcs = {
   #                      0 name                    1 stature              2 wearing                 3 action                                    4 where                                5 6 prns     7 friendship interest / 10
   "Coral":             ["Coral",                 "small woman",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
   "Persephone":        ["Persephone",            "tall dark woman",    "black mechanics fit",   "twisting a gear in the cogswork",        "under a vicious looking copper machine",   "she", "her",  4],
-  "Credit card cookie":["Credit card cookie",    "small doughy being", "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
+  "Cookiemaster":      ["Cookiemaster",          "small doughy being", "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
   "Hanneman":          ["Hanneman",              "man",                "top hat",               "flirting with himself",                  "in a mirror",                              "he",  "him",  0],
-  "child":             ["child",                 "small woman",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
-  "Diggerman":         ["Diggerman",             "small mole like creature",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9],
+  "child":             ["child",                 "small child",        "pink lab coat",         "mixing chemicals",                       "on a table in the corner",                 "she", "her",  9]
 }
 npcs_id = {}
 list_npcs = list(npcs.keys())
@@ -164,15 +164,6 @@ npcs_parts = {
 def newln():
   print("\n")
 
-#insult
-def generate_insults(insult, insults1, insults2, insults3):
-  i1 = random.choice(insults1)
-  i2 = random.choice(insults2)
-  i3 = random.choice(insults3)
-  insult = i1 + " " + i2 + " "+ i3
-  return(insult)
-
-
 #add delay between each letter to make it look like something is typing
 def entity_types(msg):
   newln()
@@ -208,8 +199,7 @@ def npc_item_response(item, interacting):
   elif npcs[interacting][7] >= 2:
     print(f".... right ok uh a {item}... nice... thanks..?")
   else:
-    generate_insults()
-    print(f"CURSE YOU AND YOUR {insult.upper} FOR GIVING ME THIS {item.upper()}")
+    print(f":(((( ok ill take it")
   return()
 
 #when user has answer as 'give X'
@@ -222,9 +212,8 @@ def giveitem(item, interacting, npcs, keyitems, giveitems, other_items, item_ori
     print(f"you want to give {interacting} the {item}, yet you feel a force keeping you in place, telling you this item is too important to give away")
     warnings += 1
     if warnings > 3:
-      entity_types(f"The Voice Of God enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1].upper()} A {item.upper()}")
+      entity_types(f"A Voice enters your head and tells you to STOP TRYING TO GIVE THIS {npcs[1].upper()} A {item.upper()}")
       if warnings >= 5:
-        generate_insults(insult, insults1, insults2, insults3)
         entity_types(f"ok FLIP YOU you {insult.upper}, my GRAND PLANS... :( PLEASE LEAVE")
   else: 
     print("you need this somewhere else...")
@@ -254,7 +243,7 @@ def new_area(areaindex, npc_desc):
       elif npcs[areaindex][7] > 5:
         print(f"{npcs[areaindex][5]} looks up questioningly..")
       else:
-        print(f"...\n{npcs[areaindex][5]} tells you to piss off")
+        print(f"...\n{npcs[areaindex][5]} looks annoyed at the interruption")
     else:
       print("the place is void of any and all people")
   return(areaindex)
