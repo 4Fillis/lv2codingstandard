@@ -59,16 +59,17 @@ deft_dir = {
   "up"     : "ceiling", 
   "down"   : "floor"
 }
+#areas list with key numbers
+al = [{0:"hospital room"}, {1:"bathroom"}, {2:"rainbow door"}, {3:"sea themed hallway"},
+{4:"stairs"}, {5:"seaweed farm"}, {6:"side door"}, {7:"carparkl"},
+{8:"minnie mouse hallway"}, {9:"nurses office"}, {10:"mickey mouse hallway"}, {11:"childrens ward"},
+{12:"elevator down"}, {13:"bakery"}, {14:"outside"}, {15:"carparkr"}, {16:"End"}
+]
+
 paths_dict = {
-  #area           0 forwards, 1 left, 2 right 3 backwards
-  "your room": [0, "rainbow door", "bathroom", 0, 0],
-  "rainbow door": [0, "sea themed hallway", "hallway with flower wallpaper" , 0],
-  "sea themed hallway": [0, 0, "stairs", "rainbow door"],
-  "stairs"     : ["hallway 1",     0,           "sink",              0,           0], 
-  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
-  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
-  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
-  "bathroom"      : ["toilet",        0,           "sink",              0,           0], 
+  #area   forwards      left    right   backwards
+  al[0][1]: [0,      al[1][1],  0,        0], 
+  al[1][1]: [0,      0,         0,        al[0][1]],
 }
 
 #items & their location, incl ALL items
