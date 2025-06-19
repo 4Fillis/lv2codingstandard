@@ -19,18 +19,29 @@ l = "n/a l"
 r = "n/a r"
 b = "n/a b"
 #areas list with key numbers
-al = [{0:"hospital room"}, {1:"bathroom"}, {2:"rainbow door"}, {3:"sea themed hallway"},
-{4:"stairs"}, {5:"seaweed farm"}, {6:"side door"}, {7:"carparkl"},
-{8:"minnie mouse hallway"}, {9:"nurses office"}, {10:"mickey mouse hallway"}, {11:"childrens ward"},
-{12:"elevator down"}, {13:"bakery"}, {14:"outside"}, {15:"carparkr"}, {16:"End"}
+al = [{0:"room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hallway"},
+{4:"cookie stairs"}, {5:"seaweed generator"}, {6:"side door"}, {7:"fudge carpark"},
+{8:"m&m hallway"}, {9:"toffee office"}, {10:"candy hallway"}, {11:"small kids room"},
+{12:"magic elevator"}, {13:"cookiehouse"}, {14:"outside"}, {15:"candy carpark"}, {16:"End"}
 ]
 
 #to edit paths in each al[a][a] a is the index number from the al list, add location and
 #change where it connects
 paths_dict = {
-  #area   forwards                 left                right      backwards
-  al[0][0]: [(f"{al[2][2]} f"),   (f"{al[1][1]} l"),   r,                  b],
-  al[1][1]: [f,                    l,                  r,                  (f"{al[0][0]} b")],
-  al[2][2]: [f,                   (f"{al[3][3]} l"),   (f"{al[8][8]} l"),  (f"{al[0][0]} b")]
+  #area   forwards                 left                right          backwards
+  #room
+  al[0][0]: [(f"{al[2][2]} f"),    (f"{al[1][1]} l"),     r,                  b],
+  #bathroom
+  al[1][1]: [f,                     l,                    r,                  (f"{al[0][0]} b")],
+  #rainbow door
+  al[2][2]: [f,                    (f"{al[3][3]} l"),     (f"{al[8][8]} l"),  (f"{al[0][0]} b")],
+  #LEFT from room hallway
+  al[3][3]: [(f"{al[4][4]} f"),     l,                    r,                  (f"{al[2][2]} b")],
+  #RIGHT from room hallway
+  al[8][8]: [(f"{al[10][10]} f"),   l,                    (f"{al[9][9]} l"),  (f"{al[3][3]} b")],
+  #little kids room
+  al[11][11]:[f,                    (f"{al[10][10]} l"),   r,                  (f"{al[10][10]} b")],
+  #TBA elevator
+  al[12][12]:[(f"{al[13][13]} f"),  (f"{al[10][10]} l"),   r,                  (f"{al[10][10]} b")],
 }
 print(paths_dict)
