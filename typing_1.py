@@ -18,11 +18,13 @@ f = "n/a f"
 l = "n/a l"
 r = "n/a r"
 b = "n/a b"
+name_friend = "Allie"
 #areas list with key numbers
 al = [{0:"room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hallway"},
-{4:"cookie stairs"}, {5:"seaweed generator"}, {6:"side door"}, {7:"fudge carpark"},
+{4:"cookie stairs"}, {5:"seaweed power farm"}, {6:"side door"}, {7:"fudge carpark"},
 {8:"m&m hallway"}, {9:"toffee office"}, {10:"candy hallway"}, {11:"small kids room"},
-{12:"magic elevator"}, {13:"cookiehouse"}, {14:"outside"}, {15:"candy carpark"}, {16:"End"}
+{12:"magic elevator"}, {13:"cookiehouse"}, {14:"gingerbread steps"}, {15:"candy carpark"}, {16:"n/a"},
+{17:"candyfloss admin desk"}, {18:"Waiting area"}, {19:"outside"}, {20: name_friend}
 ]
 
 #to edit paths in each al[a][a] a is the index number from the al list, add location and
@@ -30,18 +32,35 @@ al = [{0:"room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hall
 paths_dict = {
   #area   forwards                 left                right          backwards
   #room
-  al[0][0]: [(f"{al[2][2]} f"),    (f"{al[1][1]} l"),     r,                  b],
+  al[0][0]: [(f"{al[2][2]} f"),     (f"{al[1][1]} l"),     r,                 b],
   #bathroom
-  al[1][1]: [f,                     l,                    r,                  (f"{al[0][0]} b")],
+  al[1][1]: [f,                     l,                     r,                 (f"{al[0][0]} b")],
   #rainbow door
-  al[2][2]: [f,                    (f"{al[3][3]} l"),     (f"{al[8][8]} l"),  (f"{al[0][0]} b")],
+  al[2][2]: [f,                     (f"{al[3][3]} l"),    (f"{al[8][8]} l"),  (f"{al[0][0]} b")],
   #LEFT from room hallway
-  al[3][3]: [(f"{al[4][4]} f"),     l,                    r,                  (f"{al[2][2]} b")],
+  al[3][3]: [(f"{al[4][4]} f"),     l,                     r,                 (f"{al[2][2]} b")],
   #RIGHT from room hallway
   al[8][8]: [(f"{al[10][10]} f"),   l,                    (f"{al[9][9]} l"),  (f"{al[3][3]} b")],
   #little kids room
-  al[11][11]:[f,                    (f"{al[10][10]} l"),   r,                  (f"{al[10][10]} b")],
-  #TBA elevator
-  al[12][12]:[(f"{al[13][13]} f"),  (f"{al[10][10]} l"),   r,                  (f"{al[10][10]} b")],
+  al[11][11]:[f,                    (f"{al[10][10]} l"),   r,                 (f"{al[10][10]} b")],
+  #Elevator
+  al[12][12]:[(f"{al[13][13]} f"),  (f"{al[17][17]} l"),   r,                 b],
+  #Admin [facing admin desk/entering building perspective]
+  al[17][17]:[f,                    (f"{al[12][12]} l"),   r,                 (f"{al[18][18]} b")],
+  #Waitig area
+  al[18][18]:[f,                    (f"{al[19][19]} l"),   r,                 (f"{al[17][17]} b")],
+  #Outside
+  al[19][19]:[(f"{al[20][20]} f"),  l,                     r,                 (f"{al[18][18]} b")],
+  #Cookiehouse
+  al[13][13]:[(f"{al[14][14]} f"),  l,                     r,                 (f"{al[12][12]} b")],
+  #Gingerbread steps
+  al[14][14]:[f,                    (f"{al[15][15]} l"),   r,                 (f"{al[13][13]} b")],
+  #Candy Carpark
+  al[2][2]: [(f"{al[20][20]} f"),   l,                     r,                 (f"{al[14][14]} b")],
+  #left from rainbow door/room path
+  #Cookie stairs
+  al[4][4]: [(f"{al[5][5]} f"),     l,                     r,                 (f"{al[3][3]} b")]
 }
-print(paths_dict)
+
+for key, value in paths_dict.items():
+  print(f"{key}: {value}")
