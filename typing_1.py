@@ -68,5 +68,22 @@ paths_dict = {
   al[8][8]: [f,                     l,                    (f"{al[20][20]} l"), (f"{al[6][6]} b")],
 }
 
-for key, value in paths_dict.items():
-  print(f"{key}: {value}")
+#to print dictionary line by line
+#for key, value in paths_dict.items():
+#  print(f"{key}: {value}")
+objs = {
+  #name         type    desc
+  "candybag": ["item", "a small red bag of M&M's"],
+  "lilcreep": ["npc",  "a small blue being apparently made of a blue sticky candy"],
+  "Hanneman": ["npc",  f"a 2.8 tall man with a very diginified top hat flirting with himself whilst... standing in the mug of dark liquid"
+               " you can't smell but vaugley assume its someones coffee and not something to be stood in"],
+  "Penelope": ["npc",  "a woman with star studded skin like a countryside night sky"],
+  "coffee":   ["item", "a mug of liquid, you can't smell but vaugley assume its someones coffee and not something to be stood in"]
+}
+
+
+areas_contents = {
+  al[1][1] == [objs["candybag"], objs["lilcreep"]], #bathroom
+  al[5][5] == [objs["Penelope"], objs[""]]
+}
+print(areas_contents)
