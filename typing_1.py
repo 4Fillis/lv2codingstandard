@@ -19,10 +19,11 @@ l = "n/a l"
 r = "n/a r"
 b = "n/a b"
 name_friend = "Allie"
+area_index = 1
 #areas list with key numbers
 al = [{0:"room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hallway"},
 {4:"cookie stairs"}, {5:"seaweed power farm"}, {6:"side door"}, {7:"fudge carpark"},
-{8:"m&m hallway"}, {9:"toffee office"}, {10:"candy hallway"}, {11:"small kids room"},
+{8:"m&m hallway"}, {9:"toffee office"}, {10:"m&m themed door"}, {11:"small kids room"},
 {12:"magic elevator"}, {13:"cookiehouse"}, {14:"gingerbread steps"}, {15:"candy carpark"}, {16:"n/a"},
 {17:"candyfloss admin desk"}, {18:"Waiting area"}, {19:"outside"}, {20: name_friend}
 ]
@@ -36,13 +37,15 @@ paths_dict = {
   #bathroom
   al[1][1]: [f,                     l,                     r,                  (f"{al[0][0]} b")],
   #rainbow door
-  al[2][2]: [f,                     (f"{al[3][3]} l"),    (f"{al[8][8]} l"),   (f"{al[0][0]} b")],
+  al[2][2]: [f,                     (f"{al[3][3]} l"),    (f"{al[8][8]} r"),   (f"{al[0][0]} b")],
   #LEFT from room hallway
   al[3][3]: [(f"{al[4][4]} f"),     l,                     r,                  (f"{al[2][2]} b")],
   #RIGHT from room hallway
-  al[8][8]: [(f"{al[10][10]} f"),   l,                    (f"{al[9][9]} l"),   (f"{al[3][3]} b")],
+  al[8][8]: [(f"{al[10][10]} f"),   l,                    (f"{al[9][9]} r"),   (f"{al[2][2]} b")],
+  #office
+  al[9][9]: [f,                     l,                     r,                  (f"{al[8][8]} b")],
   #little kids room
-  al[11][11]:[f,                    (f"{al[10][10]} l"),   r,                  (f"{al[10][10]} b")],
+  al[11][11]:[f,                    (f"{al[12][12]} l"),   r,                  (f"{al[10][10]} b")],
   #Elevator
   al[12][12]:[(f"{al[13][13]} f"),  (f"{al[17][17]} l"),   r,                  b],
   #Admin [facing admin desk/entering building perspective]
@@ -65,7 +68,7 @@ paths_dict = {
   #side door
   al[6][6]: [(f"{al[7][7]} f"),     l,                    r,                   (f"{al[5][5]} b")],
   #Fudge carpark
-  al[8][8]: [f,                     l,                    (f"{al[20][20]} l"), (f"{al[6][6]} b")],
+  al[7][7]: [f,                     l,                    (f"{al[20][20]} l"), (f"{al[6][6]} b")],
 }
 
 #to print dictionary line by line
@@ -73,17 +76,29 @@ paths_dict = {
 #  print(f"{key}: {value}")
 objs = {
   #name         type    desc
-  "candybag": ["item", "a small red bag of M&M's"],
-  "lilcreep": ["npc",  "a small blue being apparently made of a blue sticky candy"],
-  "Hanneman": ["npc",  f"a 2.8 tall man with a very diginified top hat flirting with himself whilst... standing in the mug of dark liquid"
+  "candybag": ["item", "small red bag of M&M's"],
+  "lilcreep": ["npc",  "small blue being apparently made of a blue sticky candy"],
+  "Hanneman": ["npc",  f"2.8 tall man with a very diginified top hat flirting with himself whilst... standing in the mug of dark liquid"
                " you can't smell but vaugley assume its someones coffee and not something to be stood in"],
-  "Penelope": ["npc",  "a woman with star studded skin like a countryside night sky"],
-  "coffee":   ["item", "a mug of liquid, you can't smell but vaugley assume its someones coffee and not something to be stood in"]
+  "Penelope": ["npc",  "woman with star studded skin like a country night sky"],
+  "coffee":   ["item", ""], 
+  "Teddy":    ["item", "small, faded pink, stuffed bear.. it looks very cute"],
+  "Files":    ["item", "small pile neat pile of unlabelled files on the desk"],
+  "Kid":      ["npc", "small child with about 1.2m of height sitting on a very pink wooden bed "],
+  "Cookiemaster": ["npc", "kinda average sized fuzzy blue muppetty being in a *very* rainbow apron"]
 }
 
 
-areas_contents = {
-  al[1][1] == [objs["candybag"], objs["lilcreep"]], #bathroom
-  al[5][5] == [objs["Penelope"], objs[""]]
+areas_cnts = {
+  al[1][1]:   [objs["candybag"], objs["lilcreep"]], #bathroom
+  al[9][9]:   [objs["Teddy"], objs["Files"]], #office
+  al[5][5]:   [objs["Penelope"], objs["coffee"], objs["Hanneman"]], #seaweed power room
+  al[11][11]: [objs["Kid"]], #kids room
+  al[13][13]: [objs["Cookiemaster"]] #cookiehouse
 }
-print(areas_contents)
+#to print dictionary line by line
+for key, value in areas_cnts.items():
+  print(f"{key}: {value}")
+
+def choice_move(area_no, paths_dict, al):
+  dir = input(f"You're in the {al[area_no][area_no]}")
