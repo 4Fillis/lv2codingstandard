@@ -1,15 +1,15 @@
-import random 
+#import random 
 #INSULT GENERATOR
-insults1 = ["jam", "bird", "weak", "annoying", "underbaked", "peirced"]
-insults2 = ["brained", "filled", "bag of", "limbed"]
-insults3 = ["fool", "child", "elderich horror", "skin"]
+#insults1 = ["jam", "bird", "weak", "annoying", "underbaked", "peirced"]
+#insults2 = ["brained", "filled", "bag of", "limbed"]
+#insults3 = ["fool", "child", "elderich horror", "skin"]
 
-def generate_insults(insults1, insults2, insults3):
-  i1 = random.choice(insults1)
-  i2 = random.choice(insults2)
-  i3 = random.choice(insults3)
-  insult = i1 + " " + i2 + " "+ i3
-  return(insult)
+#def generate_insults(insults1, insults2, insults3):
+#  i1 = random.choice(insults1)
+#  i2 = random.choice(insults2)
+#  i3 = random.choice(insults3)
+#  insult = i1 + " " + i2 + " "+ i3
+#  return(insult)
 
 
 #AREAS
@@ -19,9 +19,9 @@ l = "n/a l"
 r = "n/a r"
 b = "n/a b"
 name_friend = "Allie"
-area_index = 1
+area_no = 0
 #areas list with key numbers
-al = [{0:"room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hallway"},
+al = [{0:"starting room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hallway"},
 {4:"cookie stairs"}, {5:"seaweed power farm"}, {6:"side door"}, {7:"fudge carpark"},
 {8:"m&m hallway"}, {9:"toffee office"}, {10:"m&m themed door"}, {11:"small kids room"},
 {12:"magic elevator"}, {13:"cookiehouse"}, {14:"gingerbread steps"}, {15:"candy carpark"}, {16:"n/a"},
@@ -97,8 +97,41 @@ areas_cnts = {
   al[13][13]: [objs["Cookiemaster"]] #cookiehouse
 }
 #to print dictionary line by line
-for key, value in areas_cnts.items():
-  print(f"{key}: {value}")
+#for key, value in areas_cnts.items():
+#  print(f"{key}: {value}")
 
 def choice_move(area_no, paths_dict, al):
-  dir = input(f"You're in the {al[area_no][area_no]}")
+  #dedicating whats in what direction
+  print(paths_dict[al[area_no][area_no]][0][-1])
+  for i in range(4):
+    print(i)
+    if (paths_dict[al[area_no][area_no]][3].endswith("b") == True):
+      area_b = paths_dict[al[area_no][area_no]][i]
+    elif (paths_dict[al[area_no][area_no]][0].endswith("f") == True):
+      area_f = paths_dict[al[area_no][area_no]][1]
+    elif (paths_dict[al[area_no][area_no]][1].endswith("l") == True):
+      area_l = paths_dict[al[area_no][area_no]][i]
+    elif (paths_dict[al[area_no][area_no]][2].endswith("r") == True):
+      area_r = paths_dict[al[area_no][area_no]][i]
+    else:
+      print("You can't go anywhere...")
+
+  #if variable doesn't exist assign as "nothing"
+  if area_f in locals():
+    area_f = "nothing"
+  if area_b in locals():
+    area_b = "nothing"
+  if area_l in locals():
+    area_l = "nothing"
+  if area_r in locals():
+    area_r = "nothing"
+
+
+  dir = input(f"You're in the {al[area_no][area_no]}\n"+
+  f"forward is a {area_f[:-2]}\n"+
+  f"left is the {area_l[:-2]}\n"+
+  f"right is the {area_r[:-2]}\n"+
+  f"theres a {area_b[-2]} back where you came\n"
+  )
+
+choice_move(area_no, paths_dict, al)
