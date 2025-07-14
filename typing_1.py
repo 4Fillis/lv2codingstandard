@@ -1,3 +1,4 @@
+print("\n")
 #import random 
 #INSULT GENERATOR
 #insults1 = ["jam", "bird", "weak", "annoying", "underbaked", "peirced"]
@@ -14,12 +15,12 @@
 
 #AREAS
 #use variables to show in what direction there is nothing
-f = "n/a f"
-l = "n/a l"
-r = "n/a r"
-b = "n/a b"
+f = "n/a"
+l = "n/a"
+r = "n/a"
+b = "n/a"
 name_friend = "Allie"
-area_no = 0
+area_no = 4
 #areas list with key numbers
 al = [{0:"starting room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pastry hallway"},
 {4:"cookie stairs"}, {5:"seaweed power farm"}, {6:"side door"}, {7:"fudge carpark"},
@@ -31,7 +32,7 @@ al = [{0:"starting room"}, {1:"candy cane bathroom"}, {2:"rainbow door"}, {3:"pa
 #to edit paths in each al[a][a] a is the index number from the al list, add location and
 #change where it connects
 paths_dict = {
-  #area   forwards                 left                right          backwards
+  #area    forwards                left                  right               backwards
   #room
   al[0][0]: [(f"{al[2][2]} f"),     (f"{al[1][1]} l"),     r,                  b],
   #bathroom
@@ -102,36 +103,42 @@ areas_cnts = {
 
 def choice_move(area_no, paths_dict, al):
   #dedicating whats in what direction
-  print(paths_dict[al[area_no][area_no]][0][-1])
+  left = False
+  right = False
+  forward = False
+  back = False
+
   for i in range(4):
-    print(i)
-    if (paths_dict[al[area_no][area_no]][3].endswith("b") == True):
-      area_b = paths_dict[al[area_no][area_no]][i]
-    elif (paths_dict[al[area_no][area_no]][0].endswith("f") == True):
-      area_f = paths_dict[al[area_no][area_no]][1]
-    elif (paths_dict[al[area_no][area_no]][1].endswith("l") == True):
-      area_l = paths_dict[al[area_no][area_no]][i]
-    elif (paths_dict[al[area_no][area_no]][2].endswith("r") == True):
-      area_r = paths_dict[al[area_no][area_no]][i]
-    else:
-      print("You can't go anywhere...")
+    
+    if (paths_dict[al[area_no][area_no]][i].endswith("b") == True):
+      area_b = paths_dict[al[area_no][area_no]][i][:-2]
+      print(f"blue streaks lead back to the {area_b}")
+      back = True
+      
+    elif (paths_dict[al[area_no][area_no]][i].endswith("f") == True):
+      area_f = paths_dict[al[area_no][area_no]][i][:-2]
+      print(f"following pink paint streaks theres a {area_f} ")
+      forward = True
 
-  #if variable doesn't exist assign as "nothing"
-  if area_f in locals():
-    area_f = "nothing"
-  if area_b in locals():
-    area_b = "nothing"
-  if area_l in locals():
-    area_l = "nothing"
-  if area_r in locals():
-    area_r = "nothing"
+    elif (paths_dict[al[area_no][area_no]][i].endswith("l") == True):
+      area_l = paths_dict[al[area_no][area_no]][i][:-2]
+      print(f"the mysterious green brushstrokes appear to lead to {area_l}")
+      left = True
+
+    elif (paths_dict[al[area_no][area_no]][i].endswith("r") == True):
+      area_r = paths_dict[al[area_no][area_no]][i][:-2]
+      print(f"the odd yellow pattern has appeared near the {area_r}")
+      right = True
+
+    #placeholder to ensure doesn't do trapped text when a direction has nothing
+    elif (paths_dict[al[area_no][area_no]][i].endswith("n/a") == False):
+      print("You can't escape this room.... you stay there for hours..." \
+      f"\n  eventually...\n the staff come looking and take you to {name_friend}")
+
+  dir = input(f"You're in the {al[area_no][area_no]}\n")
+def user_dir():
+  print("hi")
 
 
-  dir = input(f"You're in the {al[area_no][area_no]}\n"+
-  f"forward is a {area_f[:-2]}\n"+
-  f"left is the {area_l[:-2]}\n"+
-  f"right is the {area_r[:-2]}\n"+
-  f"theres a {area_b[-2]} back where you came\n"
-  )
 
 choice_move(area_no, paths_dict, al)
