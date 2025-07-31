@@ -145,3 +145,38 @@ show_question()
 
 # Start main event loop
 root.mainloop()
+
+
+
+
+
+
+
+###################################################
+import tkinter as tk
+import random
+
+def generate_random_numbers():
+    """Generates four random numbers and updates the label."""
+    num1 = random.randint(1, 100)
+    num2 = random.randint(1, 100)
+    num3 = random.randint(1, 100)
+    num4 = random.randint(1, 100)
+
+    random_numbers_label.config(text=f"Random Numbers: {num1}, {num2}, {num3}, {num4}")
+
+# Create the main window
+root = tk.Tk()
+root.title("Random Number Generator")
+root.geometry("300x150")
+
+# Create a label to display the numbers
+random_numbers_label = tk.Label(root, text="Click 'Generate' to get numbers", font=("Arial", 12))
+random_numbers_label.pack(pady=20)
+
+# Create a button to trigger number generation
+generate_button = tk.Button(root, text="Generate Numbers", command=generate_random_numbers)
+generate_button.pack()
+
+# Start the Tkinter event loop
+root.mainloop()
