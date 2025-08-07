@@ -19,33 +19,73 @@ def drop(drop_desc):
    return desc
 area_no = {"num": 2}
 #level referrs to if pc has gone up or down (ex. stairs)
-level = 0
+level = 1
+
+#messages for key game points
+txts = {
+   "start":"You're travelling away from your homeland Plasnamesrehard,\n"
+   "the journey has been hard... \nyet you persist.. taking a different "
+   "route \nthan that of your fellow refugees to better your odds \nof "
+   "remaining invisible to the dark wizards who hunt \nyour people out "
+   "of an old grudge your forefathers held.\n They posses magicks honed "
+   "to find most beings, \nyet solo, scruffy travellers \nare too far, "
+   "below their notice."
+}
+
+#dict of buttons for each area
+#ALL areas have direction buttons
+area_btns = {
+   1:1
+}
 
 #areas list with key numbers + description & elevation (level)
 al = {
-    0: {"area": "Your old camp", "desc": "your faded brown tent, nothing worth keeping remains inside", "level": 1},
-    1: {"area": "Hiding Place", "desc": "beneth the roots of an old tree near your camp", "level": 1},
-    2: {"area": "Vanilla Plateau", "desc": "a grand open yellow-gold tiled balcony, stairases descend either side", "level": 1},
-    3: {"area": "Diamond Staircase", "desc": "gleaming blue stairs spiralling down from golden tiles", "level": 1},
-    4: {"area": "Suspended Gold Tiled Walkway", "desc": "a path of floating narrow tiles crumbling, yet resolutely suspended in the air", "level": 1},
-    5: {"area": "Broken Path to Docks", "desc": "an old worn splintered path", "level": 1},
-    6: {"area": "Secret Exit", "desc": "a break in the wood behind a canvas railing, a gap, just small enough to sneak through", "level": 1},
-    7: {"area": "Gondola", "desc": "a magical blue-purple carriage tethered to an unseen railing", "level": 1},
-    8: {"area": "Blue Ice Path", "desc": "a slippery path of blue ice formed in the air", "level": 1},
-    9: {"area": "Blue-White Pavilion", "desc": "a terrace surrounded by arches", "level": 1},
-    10: {"area": "Icy Rails", "desc": "old, old, old, icy rails from some long-forgotten train, they appear stable...yet dangerous", "level": 1},
-    11: {"area": "Station", "desc": "a terminal with some benches, very old and worn, breaking apart", "level": 1},
-    12: {"area": "Woods Ghost", "desc": "a standing circle of stones surrounding the half-corporal form of a being", "level": 1},
-    13: {"area": "Gelatinous River", "desc": "a thick treacle of a gooey gelatinous substance", "level": 1},
-    14: {"area": "Gelatinous Pool", "desc": "a circular pool of this gooey semi transparent substance", "level": 1},
-    15: {"area": "Sunken Steps", "desc": "old worn steps leading from this pool", "level": 1},
-    16: {"area": "Marshlands", "desc": "feilds of marshy wetland caked in a thick fog", "level": 1},
-    17: {"area": "Docks", "desc": "decrept wooden planks stretching into the mist", "level": 1},
-    18: {"area": "Boat", "desc": "a small wooden boat apparently abandoned an age ago", "level": 1},
-    19: {"area": "Forest Path", "desc": "a path covered in autumn leaves", "level": 1},
-    20: {"area": "Wasteland", "desc": "bleak scorched earth covered in ash and burnt gravel", "level": 1},
-    21: {"area": "Decrepit Tower", "desc": "an old yet proud building spiralling into the sky", "level": 1},
-    22: {"area": "Stay", "desc": "you stay in place just....watching the shifting mist for a moment", "level": 1}
+    0: {"area": "Your old camp", "desc": "your old campsite", "level": 1,
+         "btns":["north", "south", "hide"]},
+    1: {"area": "Hiding Place", "desc": "beneth the roots of an old tree near your camp", "level": 1,
+         "btns":["come out"]},
+    2: {"area": "Vanilla Plateau", "desc": "a grand open yellow-gold tiled balcony, stairases descend either side", "level": 1,
+         "btns":["south", "east", "west"]},
+    3: {"area": "Diamond Staircase", "desc": "gleaming blue stairs spiralling down from golden tiles", "level": 1,
+         "btns":["east", "west"]},
+    4: {"area": "Suspended Gold Tiled Walkway", "desc": "a path of floating narrow tiles crumbling, yet resolutely suspended in the air", "level": 1,
+         "btns":["east", "west"]},
+    5: {"area": "Broken Path to Docks", "desc": "an old worn splintered path", "level": 1,
+         "btns":["north", "east", "west", "talk", "pick up item"]},
+    6: {"area": "Secret Exit", "desc": "a break in the wood behind a canvas railing, a gap, just small enough to sneak through", "level": 1,
+         "btns":["north", "south"]},
+    7: {"area": "Gondola", "desc": "a magical blue-purple carriage tethered to an unseen railing", "level": 1,
+         "btns":["north", "south"]},
+    8: {"area": "Blue Ice Path", "desc": "a slippery path of blue ice formed in the air", "level": 1,
+         "btns":["east", "west"]},
+    9: {"area": "Blue-White Pavilion", "desc": "a terrace surrounded by arches", "level": 1,
+         "btns":["east", "west"]},
+    10: {"area": "Icy Rails", "desc": "old, old, old, icy rails from some long-forgotten train, they appear stable...yet dangerous", "level": 1,
+         "btns":["east", "west"]},
+    11: {"area": "Station", "desc": "a terminal with some benches, very old and worn, breaking apart", "level": 1,
+         "btns":["north [jump]", "east", "west", "talk"]},
+    12: {"area": "Woods Ghost", "desc": "a standing circle of stones surrounding the half-corporal form of a being", "level": 1,
+         "btns":["east", "west", "talk"]},
+    13: {"area": "Gelatinous River", "desc": "a thick gooey river made of some substance", "level": -1,
+         "btns":["north", "south"]},
+    14: {"area": "Gelatinous Pool", "desc": "a circular pool of this gooey semi transparent substance", "level": 1,
+         "btns":["north", "south", "pick up item"]},
+    15: {"area": "Sunken Steps", "desc": "old worn steps leading from this pool", "level": 1,
+         "btns":["south", "west"]},
+    16: {"area": "Marshlands", "desc": "feilds of marshy wetland caked in a thick fog", "level": 1,
+         "btns":["west"]},
+    17: {"area": "Docks", "desc": "decrept wooden planks stretching into the mist", "level": 1,
+         "btns":[ "east [jump]", "west"]},
+    18: {"area": "Boat", "desc": "a small wooden boat apparently abandoned an age ago", "level": 1,
+         "btns":["west"]},
+    19: {"area": "Forest Path", "desc": "a path covered in autumn leaves", "level": 1,
+         "btns":["east", "west"]},
+    20: {"area": "Wasteland", "desc": "bleak scorched earth covered in ash and burnt gravel", "level": 1,
+         "btns":["north"]},
+    21: {"area": "Decrepit Tower", "desc": "an old yet proud building spiralling into the sky", "level": 1,
+         "btns":["north", "south", "east", "west"]},
+    22: {"area": "Stay", "desc": "you stay in place just....watching the shifting mist for a moment", "level": 1,
+         "btns":"n/a"}
 }
 
 #to edit paths in each al[a]['thingtoget'] a is the index number from the al dict
@@ -155,15 +195,6 @@ def update_gui(txt, index=0, txt_done=txt_done, skip=False):
         txt_done[0] = root.after(50, update_gui, txt, index + 1)
 
 
-txts = {
-   "start":"You're travelling away from your homeland Plasnamesrehard,\n"
-   "the journey has been hard... \nyet you persist.. taking a different "
-   "route \nthan that of your fellow refugees to better your odds \nof "
-   "remaining invisible to the dark wizards who hunt \nyour people out "
-   "of an old grudge your forefathers held.\n They posses magicks honed "
-   "to find most beings, \nyet solo, scruffy travellers \nare too far, "
-   "below their notice."
-}
 #start sequence 
 def start_screen():
   #ca=current area
