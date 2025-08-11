@@ -46,30 +46,28 @@ al = {
          "btns":["come out"]},
     2: {"area": "Vanilla Plateau", "desc": "a grand open yellow-gold tiled balcony, stairases descend either side", "level": 1,
          "btns":["south", "east", "west"]},
-    3: {"area": "Diamond Staircase", "desc": "gleaming blue stairs spiralling down from golden tiles", "level": 1,
+    3: {"area": "Diamond Staircase", "desc": "gleaming blue stairs spiralling down from yellow-gold tiles", "level": 1,
          "btns":["east", "west"]},
-    4: {"area": "Suspended Gold Tiled Walkway", "desc": "a path of floating narrow tiles crumbling, yet resolutely suspended in the air", "level": 1,
-         "btns":["east", "west"]},
+     #FOUR
     5: {"area": "Broken Path to Docks", "desc": "an old worn splintered path", "level": 1,
          "btns":["north", "east", "west", "talk", "pick up item"]},
     6: {"area": "Secret Exit", "desc": "a break in the wood behind a canvas railing, a gap, just small enough to sneak through", "level": 1,
          "btns":["north", "south"]},
-    7: {"area": "Gondola", "desc": "a magical blue-purple carriage tethered to an unseen railing", "level": 1,
-         "btns":["north", "south"]},
-    8: {"area": "Blue Ice Path", "desc": "a slippery path of blue ice formed in the air", "level": 1,
+     #SEVEN
+     #EIGHT
+    9: {"area": "Blue-White Pavilion", "desc": "an old vine-covered light blue pavlivion still standing resolutley", "level": 1,
          "btns":["east", "west"]},
-    9: {"area": "Blue-White Pavilion", "desc": "a terrace surrounded by arches", "level": 1,
-         "btns":["east", "west"]},
-    10: {"area": "Icy Rails", "desc": "old, old, old, icy rails from some long-forgotten train, they appear stable...yet dangerous", "level": 1,
-         "btns":["east", "west"]},
+     #TEN
     11: {"area": "Station", "desc": "a terminal with some benches, very old and worn, breaking apart", "level": 1,
          "btns":["north [jump]", "east", "west", "talk"]},
     12: {"area": "Woods Ghost", "desc": "a standing circle of stones surrounding the half-corporal form of a being", "level": 1,
          "btns":["east", "west", "talk"]},
     13: {"area": "Gelatinous River", "desc": "a thick gooey river made of some substance", "level": -1,
          "btns":["north", "south"]},
+     #FOURTEEN
     14: {"area": "Gelatinous Pool", "desc": "a circular pool of this gooey semi transparent substance", "level": 1,
          "btns":["north", "south", "pick up item"]},
+     #FIFTEEN
     15: {"area": "Sunken Steps", "desc": "old worn steps leading from this pool", "level": 1,
          "btns":["south", "west"]},
     16: {"area": "Marshlands", "desc": "feilds of marshy wetland caked in a thick fog", "level": 1,
@@ -78,6 +76,7 @@ al = {
          "btns":[ "east [jump]", "west"]},
     18: {"area": "Boat", "desc": "a small wooden boat apparently abandoned an age ago", "level": 1,
          "btns":["west"]},
+     #NINTEEN
     19: {"area": "Forest Path", "desc": "a path covered in autumn leaves", "level": 1,
          "btns":["east", "west"]},
     20: {"area": "Wasteland", "desc": "bleak scorched earth covered in ash and burnt gravel", "level": 1,
@@ -93,49 +92,29 @@ a = 'area'
 paths_dict = {
   #area      north                 south                east                west,
   #caravan
-  al[0][a]:  [(f"{al[2][a]} n"),  (f"{al[20][a]} s"),  drop(drop_desc),     (f"{al[1][a]} w")],
+  al[0][a]:  [(f"{al[2][a]} n"),  drop(drop_desc),  drop(drop_desc),     (f"{al[1][a]} w")],
   #hiding place
   al[1][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[0][a]} e"),   drop(drop_desc)],
   #vanilla plateu
-  al[2][a]:  [drop(drop_desc),    (f"{al[0][a]} s"),   (f"{al[8][a]} e"),   (f"{al[3][a]} w")],
+  al[2][a]:  [drop(drop_desc),    (f"{al[0][a]} s"),   (f"{al[9][a]} e"),   (f"{al[3][a]} w")],
   #LEFT diamond staircase
-  al[3][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[4][a]} e"),   (f"{al[2][a]} w")],
-  #suspended gold tiled walkway
-  al[4][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[3][a]} e"),   (f"{al[5][a]} w")],
+  al[3][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[2][a]} e"),   (f"{al[2][a]} w")],
   #broken path to docks
-  al[5][a]:  [(f"{al[6][a]} n"),  drop(drop_desc),     (f"{al[4][a]} e"),   (f"{al[17][a]} w")],
+  al[5][a]:  [(f"{al[6][a]} n"),  drop(drop_desc),     (f"{al[3][a]} e"),   (f"{al[17][a]} w")],
   #secret exit
-  al[6][a]:  [(f"{al[7][a]} n"),  (f"{al[5][a]} s"),   drop(drop_desc),     drop(drop_desc)],
-  #gondola
-  al[7][a]:  [drop(drop_desc),    (f"{al[6][a]} s"),   (f"{al[12][a]} e"),  drop(drop_desc)],
-  #blue ice path
-  al[8][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[9][a]} e"),   (f"{al[2][a]} w")],
+  al[6][a]:  [(f"{al[12][a]} n"),  (f"{al[5][a]} s"),   drop(drop_desc),     drop(drop_desc)],
   #blue-white pavivion
-  al[9][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[10][a]} e"),  (f"{al[8][a]} w")],
-  #icy rails
-  al[10][a]: [drop(drop_desc),    drop(drop_desc),     (f"{al[11][a]} e"),  (f"{al[9][a]} w")],
+  al[9][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[11][a]} e"),  (f"{al[2][a]} w")],
   #station
-  al[11][a]: [(f"{al[13][a]} n"), drop(drop_desc),     (f"{al[16][a]} e"),  (f"{al[10][a]} w")],
-  #woods ghost
-  al[12][a]: [(f"{al[21][a]} n"), drop(drop_desc),     (f"{al[19][a]} e"),  (f"{al[7][a]} w")],
+  al[11][a]: [(f"{al[13][a]} n"), drop(drop_desc),     (f"{al[16][a]} e"),  (f"{al[9][a]} w")],
   #gelationous liquid
-  al[13][a]: [(f"{al[14][a]} n"), (f"{al[11][a]} s"),  drop(drop_desc),      drop(drop_desc)],
-  #gelatinous pool
-  al[14][a]: [(f"{al[15][a]} n"), (f"{al[13][a]} s"),  drop(drop_desc),      drop(drop_desc)],
-  #sunken steps
-  al[15][a]: [drop(drop_desc),    (f"{al[14][a]} s"),  (f"{al[16][a]} e"),   (f"{al[19][a]} w")],
+  al[13][a]: [(f"{al[12][a]} n"), (f"{al[11][a]} s"),  drop(drop_desc),      drop(drop_desc)],
   #marshlands
   al[16][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc)],
   #docks
   al[17][a]: [drop(drop_desc),    drop(drop_desc),     (f"{al[5][a]} e"),    (f"{al[18][a]} w")],
   #boat escape
-  al[18][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc),],
-  #forest path
-  al[19][a]: [drop(drop_desc),    drop(drop_desc),     (f"{al[15][a]} e"),   (f"{al[12][a]} w")],
-  #caught
-  al[20][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc),],
-  #Decrepit tower
-  al[21][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc),],
+  al[18][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc)],
   #staying in same location
   al[22][a]: [(f"{al[22][a]} n"),  (f"{al[22][a]} s"), 
                (f"{al[22][a]} e"), (f"{al[22][a]} w")]
