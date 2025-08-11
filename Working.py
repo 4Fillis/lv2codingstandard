@@ -68,8 +68,6 @@ al = {
     14: {"area": "Gelatinous Pool", "desc": "a circular pool of this gooey semi transparent substance", "level": 1,
          "btns":["north", "south", "pick up item"]},
      #FIFTEEN
-    15: {"area": "Sunken Steps", "desc": "old worn steps leading from this pool", "level": 1,
-         "btns":["south", "west"]},
     16: {"area": "Marshlands", "desc": "feilds of marshy wetland caked in a thick fog", "level": 1,
          "btns":["west"]},
     17: {"area": "Docks", "desc": "decrept wooden planks stretching into the mist", "level": 1,
@@ -77,8 +75,6 @@ al = {
     18: {"area": "Boat", "desc": "a small wooden boat apparently abandoned an age ago", "level": 1,
          "btns":["west"]},
      #NINTEEN
-    19: {"area": "Forest Path", "desc": "a path covered in autumn leaves", "level": 1,
-         "btns":["east", "west"]},
     20: {"area": "Wasteland", "desc": "bleak scorched earth covered in ash and burnt gravel", "level": 1,
          "btns":["north"]},
     21: {"area": "Decrepit Tower", "desc": "an old yet proud building spiralling into the sky", "level": 1,
