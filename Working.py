@@ -1,5 +1,5 @@
 '''program for a basic escape game for python programming standard lv2'''
-'''uses tkinter GUI with input of direction moving to move user through areas to escape the floating island complet they're on'''
+'''uses tkinter GUI with input of direction moving to move user through areas to escape the floating islands they're stuck on'''
 
 #working document
 import tkinter as tk
@@ -42,7 +42,7 @@ txts = {
 }
 
 
-#areas list with key numbers + description + relevant btns
+#areas list with key numbers + description 
 al = {
     0:  {"area": "your old camp",
          'desc': "your old campsite, there's not much here\n"},
@@ -69,7 +69,7 @@ al = {
          'desc': "a terminal with some benches, \nthey're very old and worn, breaking apart\n"},
 
     8:  {"area": "clearing",
-         'desc': "a standing circle of stones surrounding \nthe half-corporal form of a being\n"},
+         'desc': "a standing circle of stones surrounding \nthousands of tiny red-white mushrooms\n"},
 
     9:  {"area": "Gelatinous River",
          'desc': "a thick gooey river made of some substance\n"},
@@ -80,7 +80,7 @@ al = {
     11: {"area": "Marshlands",
          'desc': "\nfeilds of marshy wetland caked in a thick fog\n"},
 
-    12: {"area": "old dcks",
+    12: {"area": "old docks",
          'desc': "\ndecrept wooden planks stretching \ninto the mist\n"},
 
     13: {"area": "old boat",
@@ -220,8 +220,7 @@ def check_dirvalid(paths_list):
         "north": (0, "n"),
         "south": (1, "s"),
         "east":  (2, "e"),
-        "west":  (3, "w"),
-}
+        "west":  (3, "w"),}
     valid_dirs = []
     #loop through all directions to check if valid or drop
     for dir, (idx, initial) in dirs.items():
@@ -303,7 +302,7 @@ def move(going_to, name_number, area_no, paths_dict):
             txt = (
             f"Congrats :), You found a path out of the sky.\n"
             f"\n{newarea_desc} and onto solid ground once more,\n"
-            "Consider your groceries saved from going old"
+            "Consider your groceries saved from going old\n"
             "Thank you for playing."),
             index=0
         )
