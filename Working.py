@@ -1,15 +1,23 @@
+'''program for a basic escape game for python programming standard lv2'''
+'''uses tkinter GUI with input of direction moving to move user through areas to escape the floating island complet they're on'''
+
 #working document
 import tkinter as tk
 from functools import partial
 import random
 
 #main colors for gui
-txt_clr = "#e7f3ff"
-bg_clr = "#b8860b"
+txt_clr = "#0e021b" #main text highlight color
+txtbg_bar_clr = "#e3d5f1" #input bar bg
+txt_bar_clr = "#390846" #user input text color
+bg_clr = "#C0B738" #main text color
+btn_press_bg = "#C0B738"
+btn_txt_clr = "#2E2E2B"
 font = "OpenDyslexic"
+fontsize = 12
 
-drop_desc = ["blank space  ", "a long drop...  ", 
-           "wispy mist winds in the air  ", "the edge of the platform  "]
+#last letters of string cannot contain any of action letters (nsew)
+drop_desc = ["....empty air... "]
 
 #Variables : AREAS
 #use variables to show in what direction there is no path
@@ -17,9 +25,7 @@ drop_desc = ["blank space  ", "a long drop...  ",
 def drop(drop_desc):
    desc = random.choice(drop_desc)
    return desc
-area_no = {"num": 2}
-#level referrs to if pc has gone up or down (ex. stairs)
-level = 1
+area_no = {"num": 0}
 
 #messages for key game points
 txts = {
@@ -29,101 +35,127 @@ txts = {
    "remaining invisible to the dark wizards who hunt \nyour people out "
    "of an old grudge your forefathers held.\n They posses magicks honed "
    "to find most beings, \nyet solo, scruffy travellers \nare too far, "
-   "below their notice."
+   "below their notice.\n\n Input direction you wish to travel,\n your goal "
+   "is to escape this floating complex you're on, goodluck",
+   "ending1":"you"
 }
 
-#dict of buttons for each area
-#ALL areas have direction buttons
-area_btns = {
-   1:1
-}
 
-#areas list with key numbers + description & elevation (level)
+#areas list with key numbers + description + relevant btns
 al = {
-    0: {"area": "Your old camp", "desc": "your old campsite", "level": 1,
-         "btns":["north", "south", "hide"]},
-    1: {"area": "Hiding Place", "desc": "beneth the roots of an old tree near your camp", "level": 1,
-         "btns":["come out"]},
-    2: {"area": "Vanilla Plateau", "desc": "a grand open yellow-gold tiled balcony, stairases descend either side", "level": 1,
-         "btns":["south", "east", "west"]},
-    3: {"area": "Diamond Staircase", "desc": "gleaming blue stairs spiralling down from yellow-gold tiles", "level": 1,
-         "btns":["east", "west"]},
-     #FOUR
-    5: {"area": "Broken Path to Docks", "desc": "an old worn splintered path", "level": 1,
-         "btns":["north", "east", "west", "talk", "pick up item"]},
-    6: {"area": "Secret Exit", "desc": "a break in the wood behind a canvas railing, a gap, just small enough to sneak through", "level": 1,
-         "btns":["north", "south"]},
-     #SEVEN
-     #EIGHT
-    9: {"area": "Blue-White Pavilion", "desc": "an old vine-covered light blue pavlivion still standing resolutley", "level": 1,
-         "btns":["east", "west"]},
-     #TEN
-    11: {"area": "Station", "desc": "a terminal with some benches, very old and worn, breaking apart", "level": 1,
-         "btns":["north [jump]", "east", "west", "talk"]},
-    12: {"area": "Woods Ghost", "desc": "a standing circle of stones surrounding the half-corporal form of a being", "level": 1,
-         "btns":["east", "west", "talk"]},
-    13: {"area": "Gelatinous River", "desc": "a thick gooey river made of some substance", "level": -1,
-         "btns":["north", "south"]},
-     #FOURTEEN
-    14: {"area": "Gelatinous Pool", "desc": "a circular pool of this gooey semi transparent substance", "level": 1,
-         "btns":["north", "south", "pick up item"]},
-     #FIFTEEN
-    16: {"area": "Marshlands", "desc": "feilds of marshy wetland caked in a thick fog", "level": 1,
-         "btns":["west"]},
-    17: {"area": "Docks", "desc": "decrept wooden planks stretching into the mist", "level": 1,
-         "btns":[ "east [jump]", "west"]},
-    18: {"area": "Boat", "desc": "a small wooden boat apparently abandoned an age ago", "level": 1,
-         "btns":["west"]},
-     #NINTEEN
-    20: {"area": "Wasteland", "desc": "bleak scorched earth covered in ash and burnt gravel", "level": 1,
-         "btns":["north"]},
-    21: {"area": "Decrepit Tower", "desc": "an old yet proud building spiralling into the sky", "level": 1,
-         "btns":["north", "south", "east", "west"]},
-    22: {"area": "Stay", "desc": "you stay in place just....watching the shifting mist for a moment", "level": 1,
-         "btns":"n/a"}
+    0:  {"area": "your old camp",
+         "desc": "your old campsite, there's not much here"},
+
+    1:  {"area": "a hiding place",
+         "desc": "a small hollow beneath the roots of a cherry \ntree near your old camp"},
+
+    2:  {"area": "old beige balcony",
+         "desc": "a dusty yet open beige tiled balcony"},
+
+    3:  {"area": "blue stairs",
+         "desc": "faded blue stairs inscribed with patterns, \na language you can't translate"},
+
+    4:  {"area": "broken wood path",
+         "desc": "an old worn path made of splintering wood planks"},
+
+    5:  {"area": "cloth opening",
+         "desc": "a gap in the faded purple cloth of an old shopfront,\njust small enough to fit through"},
+
+    6:  {"area": "light blue pavlivion",
+         "desc": "an old vine-covered light blue pavlivion \nstill standing despite it's cracks"},
+
+    7:  {"area": "old train station",
+         "desc": "a terminal with some benches, \nthey're very old and worn, breaking apart"},
+
+    8:  {"area": "clearning",
+         "desc": "a standing circle of stones surrounding \nthe half-corporal form of a being"},
+
+    9:  {"area": "Gelatinous River",
+         "desc": "a thick gooey river made of some substance"},
+
+    10: {"area": "Gelatinous Pool",
+         "desc": "a circular pool of this gooey semi transparent substance"},
+
+    11: {"area": "Marshlands",
+         "desc": "feilds of marshy wetland caked in a thick fog"},
+
+    12: {"area": "Docks",
+         "desc": "decrept wooden planks stretching \ninto the mist"},
+
+    13: {"area": "Boat",
+         "desc": "a small wooden boat apparently \nabandoned an age ago"},
+
+    14: {"area": "Wasteland",
+         "desc": "bleak scorched earth covered \nin ash and burnt gravel"},
+
+    15: {"area": "Decrepit Tower",
+         "desc": "an old yet proud building \nspiralling into the sky"}
 }
 
-#to edit paths in each al[a]['thingtoget'] a is the index number from the al dict
-a = 'area'
+a = "area"
+#Where each location goes
 paths_dict = {
-  #area      north                 south                east                west,
-  #caravan
-  al[0][a]:  [(f"{al[2][a]} n"),  drop(drop_desc),  drop(drop_desc),     (f"{al[1][a]} w")],
-  #hiding place
-  al[1][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[0][a]} e"),   drop(drop_desc)],
-  #vanilla plateu
-  al[2][a]:  [drop(drop_desc),    (f"{al[0][a]} s"),   (f"{al[9][a]} e"),   (f"{al[3][a]} w")],
-  #LEFT diamond staircase
-  al[3][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[2][a]} e"),   (f"{al[2][a]} w")],
-  #broken path to docks
-  al[5][a]:  [(f"{al[6][a]} n"),  drop(drop_desc),     (f"{al[3][a]} e"),   (f"{al[17][a]} w")],
-  #secret exit
-  al[6][a]:  [(f"{al[12][a]} n"),  (f"{al[5][a]} s"),   drop(drop_desc),     drop(drop_desc)],
-  #blue-white pavivion
-  al[9][a]:  [drop(drop_desc),    drop(drop_desc),     (f"{al[11][a]} e"),  (f"{al[2][a]} w")],
-  #station
-  al[11][a]: [(f"{al[13][a]} n"), drop(drop_desc),     (f"{al[16][a]} e"),  (f"{al[9][a]} w")],
-  #gelationous liquid
-  al[13][a]: [(f"{al[12][a]} n"), (f"{al[11][a]} s"),  drop(drop_desc),      drop(drop_desc)],
-  #marshlands
-  al[16][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc)],
-  #docks
-  al[17][a]: [drop(drop_desc),    drop(drop_desc),     (f"{al[5][a]} e"),    (f"{al[18][a]} w")],
-  #boat escape
-  al[18][a]: [drop(drop_desc),    drop(drop_desc),     drop(drop_desc),      drop(drop_desc)],
-  #staying in same location
-  al[22][a]: [(f"{al[22][a]} n"),  (f"{al[22][a]} s"), 
-               (f"{al[22][a]} e"), (f"{al[22][a]} w")]
+   #               north             south            east             west
+    # Your old camp
+    al[0][a]: [f"{al[2][a]} n", drop(drop_desc), drop(drop_desc), f"{al[1][a]} w"],
+
+    # Hiding Place
+    al[1][a]: [drop(drop_desc), drop(drop_desc), f"{al[0][a]} e", drop(drop_desc)],
+
+    # Vanilla Plateau
+    al[2][a]: [drop(drop_desc), f"{al[0][a]} s", f"{al[6][a]} e", f"{al[3][a]} w"],
+
+    # Diamond Staircase
+    al[3][a]: [drop(drop_desc), drop(drop_desc), f"{al[2][a]} e", f"{al[4][a]} w"],
+
+    # Broken Path to Docks
+    al[4][a]: [f"{al[5][a]} n", drop(drop_desc), f"{al[3][a]} e", f"{al[12][a]} w"],
+
+    # Secret Exit
+    al[5][a]: [f"{al[8][a]} n", f"{al[4][a]} s", drop(drop_desc), drop(drop_desc)],
+
+    # Blue-White Pavilion
+    al[6][a]: [drop(drop_desc), drop(drop_desc), f"{al[7][a]} e", f"{al[2][a]} w"],
+
+    # Station
+    al[7][a]: [f"{al[9][a]} n", drop(drop_desc), f"{al[11][a]} e", f"{al[6][a]} w"],
+
+    # Gelatinous River
+    al[9][a]: [f"{al[8][a]} n", f"{al[7][a]} s", drop(drop_desc), drop(drop_desc)],
+
+    # Gelatinous Pool
+    al[10][a]: [f"{al[8][a]} n", f"{al[7][a]} s", drop(drop_desc), drop(drop_desc)],
+
+    # Docks
+    al[12][a]: [drop(drop_desc), drop(drop_desc), f"{al[4][a]} e", f"{al[13][a]} w"],
+
+    # Marshlands (ending)
+    al[11][a]: "end point",
+
+    # Boat (ending)
+    al[13][a]: "ending",
+
+    # Woods Ghost (ending)
+    al[8][a]: "ending",
+
+    # Wasteland (ending)
+    al[14][a]: "ending",
+
+    # Decrepit Tower (ending)
+    al[15][a]: "ending",
 }
+
+#setting current area
+ca = al[area_no['num']][a]
 
 #creating window
 root = tk.Tk()
-root.geometry("1200x750")
-root.title("Game title")
+root.geometry("700x620")
+root.title("Python Standard - ELLM")
 root.configure(bg=txt_clr) #background color
 
 #doing background
-bg_img = tk.PhotoImage(file="resources/floral_parchment.png")
+bg_img = tk.PhotoImage(file="resources/satin_purple.png")
 bg_label = tk.Label(root, image=bg_img)
 bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -131,23 +163,22 @@ bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 #game text
 game_txt = tk.Label(
     root,
-    text="Hello, Welcome to the game.",
+    text="",
     bg=txt_clr, #gui background
     fg=bg_clr, #text color
-    font=(font, 12, "bold")
+    font=(font, fontsize, "bold")
 )
 #padding above, below
 game_txt.pack(pady=(20, 5))
 
 txt_done = [None] #list so changeable in function
 #ending typing 
-#note: parts of tpg_end and tpg_skip were ai made
 def tpg_end(root, txt_done):
   if txt_done[0] is not None:
      root.after_cancel(txt_done[0])
      txt_done[0] = None
 
-#skip
+#skip typing effect
 def tpg_skip(event=None, txt=None):
     if txt_done[0] is not None and txt is not None:
         update_gui(txt, index=0, txt_done=txt_done, skip=True)
@@ -169,77 +200,106 @@ def update_gui(txt, index=0, txt_done=txt_done, skip=False):
         game_txt.config(text=game_txt.cget("text") + txt[index])
         txt_done[0] = root.after(50, update_gui, txt, index + 1)
 
-
 #start sequence 
 def start_screen():
   #ca=current area
    ca = al[area_no['num']][a]
-   start_moves = f"\nYou're in the {ca}\n"f"To your North {paths_dict[ca][0][:-2]}\n"f"South is {paths_dict[ca][1][:-2]}\n"f"To your East is {paths_dict[ca][2][:-2]}\n"f"To the west {paths_dict[ca][3][:-2]}"
-   update_gui(txt=txts["start"] + f"\n{start_moves}" +"aaah", index=0)
-   
+   start_moves = f"\nYou're in the {ca}\n"f"To your North: {paths_dict[ca][0][:-2]},\n"f"South: {paths_dict[ca][1][:-2]}\n"f"To the East: {paths_dict[ca][2][:-2]}\n"f"and West: {paths_dict[ca][3][:-2]}"
+   update_gui(txt=txts["start"] + f"\n{start_moves}" +"", index=0)
 
-#sorts users actions
-def action_sort(input):
-  input = input.lower()
-  dirs = ["north", "south", "east", "west"]
-  lndmrks = [al[17][a], al[21][a], al[16][a], al[20][a]]
-  pair = {
-    al[21][a]: "north",
-    al[20][a]: "south",
-    al[16][a]: "east",
-    al[18][a]: "west",
-  }
-  if input in lndmrks:
-    input = pair[input]
-  elif input in dirs or input == "stay":
-    move(input, area_no, paths_dict)
-  elif input == "pick up":
-    print("pick up item")
 
-def move(input, area_no, paths_dict):
-  go = {
+def move(going_to, area_no, paths_dict):
+    a = 'area'
+    # gets what area you're in / number
+    ca_no = area_no["num"]
+    ca = al[ca_no]["area"]
+
+    pos_places = paths_dict.get(ca)
+    print(pos_places)
+
+    # direction -> place in paths list
+    dirs_num = {
+        "north": 0,
+        "south": 1,
+        "east": 2,
+        "west": 3,
+    }
+    # finds place name
+    dir_no = dirs_num[going_to]
+    place_go = pos_places[dir_no]
+    print(f"place go {place_go}")
+
+    place_go = paths_dict[ca][dir_no][:-2]
+
+    #dict of area name by area number from al dict
+    name_number = {value[a]: key for key, value in al.items()}
+    area_no["num"] = name_number[place_go]
+    
+    movn = f"You move {going_to} to {place_go}."
+    go = {
       "north": paths_dict[al[area_no['num']][a]][0][:-2],
       "south": paths_dict[al[area_no['num']][a]][1][:-2],
       "east": paths_dict[al[area_no['num']][a]][2][:-2],
-      "west": paths_dict[al[area_no['num']][a]][3][:-2],
-      "stay": al[area_no['num']]
+      "west": paths_dict[al[area_no['num']][a]][3][:-2]
     }
-  dspld_txt = game_txt.cget("text")
-  where_go = go[input]
-  if not where_go or where_go.strip() in ("", "None"):
-        update_gui(txt="Can't get your input... please try again\n"
-                  "use simple *valid* inputs like 'north'\n" + dspld_txt, index=0)
+    moves = f"\nTo your North is {go['north']}, \nTo your South is {go['south']}, "f"\nEast there's {go['east']}, \n To your West is {go['west']}."
+    #update current area number
+    ca_no = area_no["num"]
+    ca = al[ca_no]["area"]
+    pos_places = paths_dict.get(ca)
+    print(f"new {pos_places}")
+    # If this is an ending point
+    if "ending" in pos_places:
+        update_gui(
+            txt=f"You've reached an ending, eascaping the floating islands'\n"
+                "Thanks for playing!",
+            index=0
+        )
+        input_bar.destroy()
+        input_button.destroy()
+        entry_frame.destroy()
+        input_msg.destroy()
         return
+    # ADD END SCREEN CHECK WHICH ENDING
 
-    # Try to find the matching area index
-  try:
-    area_index = next(i for i, v in al.items() if v["area"] == where_go)
-    area_no["num"] = area_index
-  except StopIteration:
-    update_gui(txt="Can't get what you're trying... please try again\n"
-              "use simple valid inputs like 'south'\n" + dspld_txt, index=0)
-    return
-  
-  #i=id v=sub dict, comp 'area' w/ where_go to find right math in al
-  area_no["num"] = next((i for i, v in al.items() if v["area"] == where_go), None)
-  update_gui(txt=f"Currently in: {al[area_no['num']][a]}\n"
-            f"Facing North {go['north']}\n"
-            f"Immediatley to the South {go['south']}\n"
-            f"East there's {go['east']}\n"
-            f"and West there's {go['west']}", index=0)
+    newarea_desc = "\n it's " + al[ca_no]["desc"] + "\n"
+    
+    #update screen
+    update_gui(txt=movn + newarea_desc + moves, index=0, txt_done=txt_done, skip=False)
+    return ca
+    
 
 #Takes user input and clears input bar
-def user_input(event=None):
+def user_input(ca, paths_dict, event=None):
     input = input_bar.get()
     input = input.lower()
-    print(f"User input: {input}")
+    valid_actions = ['north', 'south', 'east', 'west']
+    if paths_dict[ca][0][-2:] != ' n':
+       valid_actions.remove('north')
+    if paths_dict[ca][1][-2:] != ' s':
+       valid_actions.remove('south')
+    if paths_dict[ca][2][-2:] != ' e':
+       valid_actions.remove('east')
+    if paths_dict[ca][3][-2:] != ' w':
+       valid_actions.remove('west')
+    #give error message if invalid direction
+    if input not in valid_actions:
+       error_msg = "\n\n" +"Apologies!\n" \
+       f"You cannot input '{input}'\n Valid inputs are: {valid_actions}.\n" 
+       "Please try again..."
+       ct = game_txt.cget("text")
+       error_start = ct.find("Apologies!")
+       if error_start != -1:
+            ct = ct[:error_start].rstrip()
+       update_gui(txt=(ct + error_msg), index=0, txt_done=txt_done, 
+       skip=True)
     input_bar.delete(0, tk.END)
-    action_sort(input)
+    move(input, area_no, paths_dict)
 
 #input message
 input_msg = tk.Label(
     root,
-    text="What do you want to do?",
+    text="Where do you wish to go?",
     bg=txt_clr, #gui background
     fg=bg_clr, #text color
     font=(font, 12, "italic")
@@ -257,38 +317,27 @@ input_bar = tk.Entry(
     width=30,
     relief="solid", #border style
     borderwidth=2,
-    bg="#f0f8ff", #input box bg color
-    fg="#000000", #text color
-    font=(font, 10)
+    bg=txtbg_bar_clr, #input box bg color
+    fg=txt_bar_clr, #text color
+    font=(font, fontsize, 'bold')
 )
 input_bar.pack()
-input_bar.bind("<Return>", user_input)
+#uses lambda to use function with specs in brackets
+input_bar.bind("<Return>", lambda event: user_input(ca, paths_dict, event))
+
 input_button = tk.Button(
     root,
-    text="Get Text",
-    command=user_input,
+    text="Move",
+    #uses lambda function to send ca and paths_dict to function
+    command=lambda: user_input(ca, paths_dict, event=None),
     bg=bg_clr, #background color
-    fg="white", #text color
-    activebackground="#e6b438", #color change when pressed
-    font=(font, 10, "bold"))
+    fg=btn_txt_clr, #text color
+    activebackground=btn_press_bg, #color change when pressed
+    font=(font, fontsize, "bold"))
 #button space 10 above, 20 below
 input_button.pack(pady=(10, 20))
 
-#function for changing areas when user moves
-def change_area(paths_dict, al_id, area_no, dir):
-  go = {
-      "north": paths_dict[al[area_no['num']][a]][0][:-2],
-      "south": paths_dict[al[area_no['num']][a]][3][:-2],
-      "east": paths_dict[al[area_no['num']][a]][1][:-2],
-      "west": paths_dict[al[area_no['num']][a]][2][:-2]
-    }
-  where_go = go[dir]
-  if "can't go that way" not in where_go:
-    print(f"where go is: {where_go}")
-    area_no['num'] = al_id[where_go]
-    print(f"after move {area_no['num']}")
-  else:
-    print("input invalid.")
+
 start_screen()
 # Start the Tkinter event loop
 root.mainloop()
